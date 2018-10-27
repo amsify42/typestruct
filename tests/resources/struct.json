@@ -1,0 +1,24 @@
+{
+    "name": "string",
+    "email": "string",
+    "id": 1,
+    "address": {
+        "door": "string",
+        "zip": 500028
+    },
+    "items": ["one", 1, 1.1],
+    "someEl": {
+        "key1": "string",
+        "key2": 12,
+        "key12": ["two", 2, 2.2],
+        "someChild": {
+            "key3": true,
+            "key4": 2.2,
+            "someAgainChild": {
+                "key5": "string",
+                "key6": 1.0,
+                "key56": [true, false, true]
+            }
+        }
+    }
+}

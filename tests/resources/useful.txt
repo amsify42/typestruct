@@ -1,0 +1,21 @@
+Whoops
+https://code.tutsplus.com/tutorials/whoops-php-errors-for-cool-kids--net-32344
+
+Extract string between curly braces
+https://stackoverflow.com/questions/50992476/matching-all-contents-between-curly-braces-regex
+
+Checking types
+https://stackoverflow.com/questions/9801838/determine-the-type-of-array-element-in-php
+
+
+// Useful if type of class is present somewhere where psr-4 loading cannot identify
+// $typeValidator->setIncludeFile(function($resource){
+// 	$resourceArray 	= explode('\\', $resource);
+// 	$file 			= end($resourceArray);
+// 	$path 			= tresource('app/'.$file.'.php');
+// 	if($file && file_exists($path)) {
+// 		require_once $path; return true;
+// 	} else {
+// 		return false;
+// 	}
+// });

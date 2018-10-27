@@ -1,0 +1,119 @@
+<?php
+
+namespace Amsify42\TypeStruct\Core;
+
+use stdClass;
+
+class Resource
+{
+	protected $gInfo = [];
+
+	protected function getAutoloadPsr4Path($class)
+	{
+		$classPath 	= NULL;
+		$appLevel 	= false;
+		$directory 	= TI_SRC_PATH.'/../';
+		if(is_file(TI_SRC_PATH.'/../../vendor')) {
+			$appLevel 	= true;
+			$directory 	= TI_SRC_PATH.'/../../../';
+		}
+		if(is_file($directory.'composer.json')) {
+			$composer 	= json_decode(file_get_contents($directory.'composer.json'), true);
+			if($composer) {
+				if($composer['autoload'] && $composer['autoload']['psr-4']) {
+					$classPath = $this->isClassPath($composer['autoload']['psr-4'], $class, $directory);
+				}
+				if(!$classPath && $composer['autoload-dev'] && $composer['autoload-dev']['psr-4']) {
+					$classPath = $this->isClassPath($composer['autoload-dev']['psr-4'], $class, $directory);
+				}
+			}
+		}
+		if($appLevel && !$classPath) {
+			$directory 	= TI_SRC_PATH.'/../';
+			if(is_file($directory.'composer.json')) {
+				$composer 	= json_decode(file_get_contents($directory.'composer.json'), true);
+				if($composer) {
+					if($composer['autoload'] && $composer['autoload']['psr-4']) {
+						$classPath = $this->isClassPath($composer['autoload']['psr-4'], $class, $directory);
+					}
+					if(!$classPath && $composer['autoload-dev'] && $composer['autoload-dev']['psr-4']) {
+						$classPath = $this->isClassPath($composer['autoload-dev']['psr-4'], $class, $directory);
+					}
+				}
+			}
+		}
+		return $classPath;
+	}
+
+	private function isClassPath($namespaces, $class, $directory)
+	{
+		$classPath = NULL;
+		foreach($namespaces as $namespace => $dir) {
+			if(strpos($class, $namespace) !== false) {
+				$classFile 	= str_replace($namespace, '', $class);
+				$classFile 	= str_replace('\\', '/', $classFile);
+				$classFile 	= $classFile.'.php';
+				$path 		= $directory.$dir.$classFile;
+				if(file_exists($path)) {
+					$classPath = $path; break;
+				}
+			}
+		}
+		return $classPath;
+	}
+
+	protected function generateInterface()
+	{
+		$this->generateDirectory();
+		$this->generateJson();
+	}
+
+	private function generateDirectory()
+	{
+		$this->gInfo['name'] 	= tsencode($this->info['full_name']);
+		$this->gInfo['dir'] 	= resource('generate/'.$this->gInfo['name']);
+		if(!file_exists($this->gInfo['dir'])) {
+		    mkdir($this->gInfo['dir'], 0777, true);
+		}
+		$this->gInfo['json'] 	= $this->gInfo['dir'].'/'.$this->gInfo['name'].'.json';
+		$this->gInfo['php'] 	= $this->gInfo['dir'].'/'.$this->gInfo['name'].'.php';
+	}
+
+	private function generateJson()
+	{
+		$getFile 		= json_decode($this->getJsonFile());
+		$fileUpdated 	= filemtime($this->info['path']);
+		if(!$getFile || ($getFile->updated != $fileUpdated)) {
+			$data 				= new stdClass();
+			$data->updated 		= $fileUpdated;
+			$data->structure 	= $this->structure; 
+			$jsonData 			= json_encode($data);
+			file_put_contents($this->gInfo['json'], $jsonData);
+			$this->generateClass();
+		}
+	}
+
+	private function generateClass()
+	{
+		$fp = fopen($this->gInfo['php'], 'w');
+		$content = "<?php";
+		if(isset($this->info['namespace']) && $this->info['namespace']) {
+			$content .= " 
+namespace {$this->info['namespace']};";
+		}
+		$content .= "
+
+class {$this->info['name']} extends \Amsify42\TypeStruct\Core\Struct
+{
+	
+}";
+		fwrite($fp, $content);
+		fclose($fp);
+	}
+
+	private function getJsonFile()
+	{
+		return (is_file($this->gInfo['json']))? file_get_contents($this->gInfo['json']): NULL;
+	}
+
+}

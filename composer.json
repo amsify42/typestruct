@@ -1,0 +1,36 @@
+{
+    "name": "amsify42/typestruct",
+    "description": "TypeStruct",
+    "authors": [
+        {
+            "name": "Mohd Samiullah",
+            "email": "amsify42@gmail.com"
+        }
+    ],
+    "type": "project",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit":  "^7.0",
+        "filp/whoops": "2.*"
+    },
+    "autoload": {
+        "files": [
+            "src/Helper/global.php"
+        ],
+        "psr-4": {
+            "Amsify42\\TypeStruct\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "files": [
+            "tests/resources/helpers/global.php"
+        ],
+        "psr-4": {
+            "TestTS\\": "tests/"
+        }
+    },
+    "license": "MIT",
+    "minimum-stability": "dev"
+}
