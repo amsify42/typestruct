@@ -3,23 +3,30 @@
 namespace Amsify42\TypeStruct\Helper;
 
 use Amsify42\TypeStruct\DataType as DataTypes;
+use Amsify42\TypeStruct\Core\Struct;
+use stdClass;
 
 class DataType
 {
 	public static function isValid($value, $type)
 	{
+		$valid = false;
 		if($type == 'mixed') {
-			return true;
-		} else if(is_string($value) && $type == 'string') {
-			return true;
-		} else if(is_int($value) && $type == 'int') {
-			return true;
-		} else if(is_float($value) && $type == 'float') {
-			return true;
-		} else if(is_array($value) && $type == 'array') {
-			return true;
+			$valid = true;
+		} else if(is_string($value)) {
+			if($type == 'string') $valid = true;
+		} else if(is_int($value)) {
+			if($type == 'int') $valid = true;
+		} else if(is_float($value)) {
+			if($type == 'float') $valid = true;
+		} else if(is_array($value)) {
+			if($type == 'array') $valid = true;
+		} else if(is_bool($value)) {
+			if($type == 'boolean') $valid = true;
+		} else if(is_object($value)) {
+			if($value instanceof $type) $valid = true;
 		}
-		return false;	
+		return $valid;	
 	}
 
 	public static function getValue($value)
@@ -57,28 +64,28 @@ class DataType
 		$isAssign 	= true;
 		if($property instanceof DataTypes\TypeString) {
 			if(is_string($value)) {
-				return $property->assign($value);
+				return new DataTypes\TypeString($value);
 			} else {
 				$type 		= 'string';
 				$isAssign 	= false;
 			}
 		} else if($property instanceof DataTypes\TypeInt) {
 			if(is_int($value)) {
-				return $property->assign($value);
+				return new DataTypes\TypeInt($value);
 			} else {
 				$type 		= 'integer';
 				$isAssign 	= false;
 			}
 		} else if($property instanceof DataTypes\TypeFloat) {
 			if(is_float($value)) {
-				return $property->assign($value);
+				return new DataTypes\TypeFloat($value);
 			} else {
 				$type 		= 'float';
 				$isAssign 	= false;
 			}
 		} else if($property instanceof DataTypes\TypeArray) {
 			if(is_array($value)) {
-				return $property->assign($value);
+				return new DataTypes\TypeArray($value, $property->getType());
 			} else {
 				$type 		= 'array';
 				$isAssign 	= false;
@@ -90,5 +97,19 @@ class DataType
 		} else {
 			throw new \RuntimeException("Property: ".$name." -- Trying to assign '".gettype($value)."' expected '".$type."'");
 		}
+	}
+
+	public static function childToStruct($object, $isChild = false)
+	{
+		$stdObject 	= new stdClass;
+		foreach($object as $name => $element)
+		{
+			if($element instanceof stdClass) {
+				$stdObject->{$name} = self::childToStruct($element, true);
+			} else {
+				$stdObject->{$name} = $element;
+			}
+		}
+		return ($isChild)? new Struct($stdObject): $stdObject; 
 	}
 }

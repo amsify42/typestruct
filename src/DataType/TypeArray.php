@@ -12,10 +12,30 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
 
 	function __construct(array $array, string $type = 'mixed')
 	{
-		$this->array    = $array;
+        if($type == 'mixed') {
+            $newArray = [];
+            foreach($array as $nak => $value) {
+                $newArray[$nak] = DataType::getValue($value);
+            }
+        } else {
+            $newArray = [];
+            foreach($array as $nak => $value) {
+                if(DataType::isValid($value, $type)) {
+                    $newArray[$nak] = DataType::getValue($value);
+                } else {
+                    throw new \RuntimeException("Array of type must be:".$type);
+                }
+            }
+        }
+        $this->array    = $newArray;
         $this->type     = $type;
         $this->position = 0;
 	}
+
+    public function getType()
+    {
+        return $this->type;
+    }
 
     /**
      * Iterator Methods
@@ -81,26 +101,5 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
     public function count()
     {
         return count($this->array);
-    }
-
-    public function assign(array $array)
-    {
-        if($this->type == 'mixed') {
-            $newArray = [];
-            foreach($array as $nak => $value) {
-                $newArray[$nak] = DataType::getValue($value);
-            }
-            return new self($newArray);
-        } else {
-            $newArray = [];
-            foreach($array as $nak => $value) {
-                if(DataType::isValid($value, $this->type)) {
-                    $newArray[$nak] = DataType::getValue($value);
-                } else {
-                    throw new \RuntimeException("Array of type must be:".$this->type);
-                }
-            }
-            return new self($newArray, $this->type);
-        }
     }
 }

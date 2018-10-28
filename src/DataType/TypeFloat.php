@@ -17,9 +17,4 @@ final class TypeFloat extends DataType
 	{
 		return (string)$this->value;
 	}
-
-	public function assign(float $value)
-	{
-		return new self($value);
-	}
 }

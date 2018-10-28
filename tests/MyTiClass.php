@@ -2,11 +2,11 @@
 
 namespace TestTS;
 
-use \TestTS\resources\interfaces\Simple;
+use \TestTS\resources\structs\Simple;
 
 class MyTiClass extends \Amsify42\TypeStruct\Core\Validator
 {
-	protected $baseNameSpace 	= \TestTS\resources\interfaces::class;
+	protected $baseNameSpace 	= \TestTS\resources\structs::class;
 	protected $validateFull 	= true;
 
 	protected function test(Simple $simple, $id)

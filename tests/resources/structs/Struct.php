@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Interfaces;
+namespace TestTS\resources\structs;
 
 use TestTS\resources\app\User;
 
-interface Struct {
+typestruct Struct {
 	name: string,
 	email: string,
 	id: int,

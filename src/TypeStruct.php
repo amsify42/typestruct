@@ -11,7 +11,6 @@ class TypeStruct extends Resource
 	private $arrayTypes 	= ['array', '[]', 'string', 'int', 'float', 'boolean'];
 	private $originalContent;
 	private $content;
-	private $includeFileCallback;
 	private $token 			= '->';
 
 	private $validateFull 	= false;
@@ -23,7 +22,7 @@ class TypeStruct extends Resource
 
 	public function __construct()
 	{
-		define('TI_SRC_PATH', __DIR__);
+		define('TS_SRC_PATH', __DIR__);
 	}
 
 	public function setToken($token = '->')
@@ -48,13 +47,6 @@ class TypeStruct extends Resource
 		$this->extractStructure();
 	}
 
-	public function setIncludeFile($callback)
-	{
-		if(is_callable($callback)) {
-			$this->includeFileCallback = $callback;
-		}
-	}
-
 	public function setValidateFull($isFull)
 	{
 		$this->validateFull = $isFull;
@@ -71,8 +63,8 @@ class TypeStruct extends Resource
 		$this->content 			= preg_replace('![ \t]*//.*[ \t]*[\r\n]!', '', $this->content);
 		$this->findFullClassName();
 		$this->findUsedNamespaces();
-		$this->structure 		= $this->interfaceToObject($this->content);
-		$this->generateInterface();
+		$this->structure 		= $this->structToObject($this->content);
+		$this->generateStruct();
 		return $this;
 	}
 
@@ -109,10 +101,10 @@ class TypeStruct extends Resource
 		return json_encode($this->structure);
 	}
 
-	public function interfaceToObject($interfaceString)
+	public function structToObject($structString)
 	{
 		$structure 	= new stdClass();
-		$pairs 		= $this->extractDictionary($interfaceString);
+		$pairs 		= $this->extractDictionary($structString);
 		foreach($pairs as $pair) {
 			$subPairs = $this->extractDictionary($pair);
 			if(sizeof($subPairs) > 0) {
@@ -126,7 +118,7 @@ class TypeStruct extends Resource
 				$elementArray = explode(':', trim($element));
 				if(sizeof($elementArray)> 1) {
 					if(trim($elementArray[1]) == '{}') {
-						$structure->{trim($elementArray[0])} = isset($subPairs[$subPairIndex])? $this->interfaceToObject('{'.$subPairs[$subPairIndex].'}'): 'NULL';
+						$structure->{trim($elementArray[0])} = isset($subPairs[$subPairIndex])? $this->structToObject('{'.$subPairs[$subPairIndex].'}'): 'NULL';
 						$subPairIndex++;
 					} else {
 						$result = $this->isValidType($elementArray[1]);
@@ -217,18 +209,12 @@ class TypeStruct extends Resource
 		}
 	}
 
-	public function getInterface()
+	public function getTypeStruct()
 	{
 		require_once $this->gInfo['php'];
 		$class 		= "\\".$this->info['full_name'];
-		$interface 	= new $class;
-		if($this->info['data']) {
-			$interface->setData($this->info['data']);
-			// foreach($this->info['data'] as $property => $value) {
-			// 	$interface->{$property} = $value;
-			// }
-		}
-		return $interface;
+		$struct 	= new $class($this->info['data']);
+		return $struct;
 	}
 
 	private function findArrayType($type)
@@ -290,30 +276,7 @@ class TypeStruct extends Resource
 			}
 		}
 		$info['type'] = $resource;
-		// if($this->includeFileCallback && call_user_func_array($this->includeFileCallback, [$resource])) {
-		// 	$info['isValid'] 	= true;
-		// 	$info['type'] 		= $resource;
-		// } else if($this->includeFile($resource)) {
-		// 	$info['isValid'] 	= true;
-		// 	$info['type'] 		= $resource;
-		// } else {
-		// 	if($found) {
-		// 		throw new \RuntimeException("Class: '".$resource."' not found");
-		// 	}
-		// }
 		return $info;
-	}
-
-	private function includeFile($resource)
-	{
-		$resourceArray 	= explode('\\', $resource);
-		$file 			= end($resourceArray);
-		if($file && file_exists($file.'.php')) {
-			require_once $file.'.php';
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	public function extractDictionary($string)

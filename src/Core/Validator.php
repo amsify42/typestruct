@@ -7,7 +7,7 @@ use ReflectionClass;
 
 class Validator
 {
-	public $typeInterface;
+	public $typeStruct;
 
 	protected $baseNameSpace;
 	protected $validateFull = true;
@@ -17,7 +17,7 @@ class Validator
 
 	function __construct()
 	{
-		$this->typeInterface = new TypeStruct();
+		$this->typeStruct = new TypeStruct();
 	}
 
 	function __call($method, $arguments)
@@ -29,14 +29,14 @@ class Validator
 			if($rMethod->getNumberOfParameters()> 0) {
 				foreach($rMethod->getParameters() as $pKey => $param) {
 					preg_match('/>(.*?)\$/ims', $param->__toString(), $matches);
-					$interface = trim($matches[1]);
-					if($interface) {
-						$arguments[$pKey] = $this->getInterface($interface, $arguments[$pKey]);
+					$struct = trim($matches[1]);
+					if($struct) {
+						$arguments[$pKey] = $this->getTypeStruct($struct, $arguments[$pKey]);
 					}
 				}
 			}
 			if($rMethod->hasReturnType()) {
-				$this->activeInterface = trim($rMethod->getReturnType()->__toString());
+				$this->activeStruct = trim($rMethod->getReturnType()->__toString());
 			}
 			return call_user_func_array([$this, $method], $arguments);
 		}
@@ -47,16 +47,16 @@ class Validator
 		$this->baseNameSpace = $baseNameSpace;
 	}
 
-	private function getInterface($interface, $data)
+	private function getTypeStruct($struct, $data)
 	{
-		if(!$this->baseNameSpace || strpos($interface, $this->baseNameSpace) !== false) {
-			$this->typeInterface->setClass($interface);
-			$this->typeInterface->setValidateFull($this->validateFull);
-			$response 	= $this->typeInterface->validate($data);
+		if(!$this->baseNameSpace || strpos($struct, $this->baseNameSpace) !== false) {
+			$this->typeStruct->setClass($struct);
+			$this->typeStruct->setValidateFull($this->validateFull);
+			$response 	= $this->typeStruct->validate($data);
 			if($response['isValid']) {
-				return $this->typeInterface->getInterface();
+				return $this->typeStruct->getTypeStruct();
 			} else {
-				$message = "Structure must be of type '{$interface}'\n";
+				$message = "Structure must be of type '{$struct}'\n";
 				$message .= "\nErrors:\n";
 				$message .= implode(", ", $response['messages']);
 				throw new \RuntimeException($message);
@@ -67,10 +67,10 @@ class Validator
 
 	protected function validateReturn($data)
 	{
-		if($this->activeInterface) {
-			$interface 				= $this->activeInterface;
-			$this->activeInterface 	= NULL;
-			return $this->getInterface($interface, $data);
+		if($this->activeStruct) {
+			$struct 				= $this->activeStruct;
+			$this->activeStruct 	= NULL;
+			return $this->getTypeStruct($struct, $data);
 		}
 		return $data;
 	}

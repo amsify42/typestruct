@@ -1,8 +1,8 @@
 <?php
 
-namespace TestTS\resources\interfaces;
+namespace TestTS\resources\structs;
 
-interface Simple {
+typestruct Simple {
 	id: int,
 	name: string,
 	price: float,

@@ -17,9 +17,4 @@ final class TypeString extends DataType
 	{
 		return $this->value;
 	}
-
-	public function assign(string $value)
-	{
-		return new self($value);
-	}
 }

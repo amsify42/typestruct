@@ -12,10 +12,10 @@ class Resource
 	{
 		$classPath 	= NULL;
 		$appLevel 	= false;
-		$directory 	= TI_SRC_PATH.'/../';
-		if(is_file(TI_SRC_PATH.'/../../vendor')) {
+		$directory 	= TS_SRC_PATH.'/../';
+		if(is_file(TS_SRC_PATH.'/../../vendor')) {
 			$appLevel 	= true;
-			$directory 	= TI_SRC_PATH.'/../../../';
+			$directory 	= TS_SRC_PATH.'/../../../';
 		}
 		if(is_file($directory.'composer.json')) {
 			$composer 	= json_decode(file_get_contents($directory.'composer.json'), true);
@@ -29,7 +29,7 @@ class Resource
 			}
 		}
 		if($appLevel && !$classPath) {
-			$directory 	= TI_SRC_PATH.'/../';
+			$directory 	= TS_SRC_PATH.'/../';
 			if(is_file($directory.'composer.json')) {
 				$composer 	= json_decode(file_get_contents($directory.'composer.json'), true);
 				if($composer) {
@@ -62,7 +62,7 @@ class Resource
 		return $classPath;
 	}
 
-	protected function generateInterface()
+	protected function generateStruct()
 	{
 		$this->generateDirectory();
 		$this->generateJson();
@@ -86,7 +86,7 @@ class Resource
 		if(!$getFile || ($getFile->updated != $fileUpdated)) {
 			$data 				= new stdClass();
 			$data->updated 		= $fileUpdated;
-			$data->structure 	= $this->structure; 
+			$data->structure 	= $this->structure;
 			$jsonData 			= json_encode($data);
 			file_put_contents($this->gInfo['json'], $jsonData);
 			$this->generateClass();
@@ -105,7 +105,10 @@ namespace {$this->info['namespace']};";
 
 class {$this->info['name']} extends \Amsify42\TypeStruct\Core\Struct
 {
-	
+	function __construct(\$data)
+	{
+		parent::__construct(\$data);
+	}
 }";
 		fwrite($fp, $content);
 		fclose($fp);

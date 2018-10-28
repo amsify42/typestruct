@@ -17,9 +17,4 @@ final class TypeInt extends DataType
 	{
 		return (string)$this->value;
 	}
-
-	public function assign(int $value)
-	{
-		return new self($value);
-	}
 }

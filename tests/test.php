@@ -7,7 +7,7 @@ $whoops = new \Whoops\Run();
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
-$execTime 	= false;
+$execTime 	= true;
 $test 		= 'core'; // ('core', 'class')
 
 
@@ -16,8 +16,8 @@ if($execTime) $start = microtime(true);
 if($test == 'core') {
 	$typeValidator = new Amsify42\TypeStruct\TypeStruct();
 	// Set Class
-	$typeValidator->setClass(\TestTS\resources\interfaces\Struct::class);
-	// Set actual path of interface
+	$typeValidator->setClass(\TestTS\resources\structs\Struct::class);
+	// Set actual path of struct
 	//$typeValidator->setPath(tresource('Struct.php'));
 	//$typeValidator->setToken('.');
 	$typeValidator->setValidateFull(true);
@@ -29,21 +29,25 @@ if($test == 'core') {
 	$passedData->someEl->records = [new \TestTS\resources\app\Record, new \TestTS\resources\app\Record];
 	//dumP($passedData);
 	$typeValidator->validate($passedData);
-	$interface = $typeValidator->getInterface();
-	//dumP($interface); die;
-	echo $interface->name.'<br/>';
-	$interface->id = 3;
-	echo ($interface->id->value()/2).'<br/>';
-	echo $interface->someEl->someChild->key4.'<br/>';
-	echo count($interface->items).'<br/>';
-	echo $interface->items[1].'<br/>';
-	foreach($interface->items as $key => $item) {
+	$struct = $typeValidator->getTypeStruct();
+	//dumP($struct); die;
+	
+	echo $struct->name.'<br/>';
+	$struct->id = 3;
+	echo ($struct->id->value()/2).'<br/>';
+	echo $struct->someEl->someChild->key4.'<br/>';
+	echo count($struct->items).'<br/>';
+	echo $struct->items[1].'<br/>';
+	foreach($struct->items as $key => $item) {
 		echo $item.'<br/>';	
 	}
 
-	dumP($interface->someEl->someChild->someAgainChild);
-	$interface->someEl->someChild->someAgainChild->key56 = [1, 'one'];
-	dumP($interface->someEl->someChild->someAgainChild->key56);
+	dumP($struct->someEl->someChild->someAgainChild);
+	$struct->someEl->someChild->someAgainChild->key56 = [true, false, false];
+	dumP($struct->someEl->someChild->someAgainChild->key56);
+	dumP($struct->someEl->someChild->someAgainChild);
+	$struct->someEl->someChild->someAgainChild->key5 = 'new string';
+	dumP($struct->someEl->someChild->someAgainChild->key5);
 
 } else if($test == 'class') {
 

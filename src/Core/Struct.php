@@ -8,9 +8,9 @@ class Struct
 {
 	protected $data;
 
-	public function setData($data)
+	function __construct($data)
 	{
-		$this->data = $data;
+		$this->data = DataType::childToStruct($data);
 	}
 
 	function __get($name)
