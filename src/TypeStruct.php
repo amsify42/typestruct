@@ -59,11 +59,21 @@ class TypeStruct extends Resource
 		// Removing commented lines
 		$this->content 			= preg_replace('/\/\*[\s\S]+?\*\//', '', $this->originalContent);
 		$this->content 			= preg_replace('![ \t]*//.*[ \t]*[\r\n]!', '', $this->content);
+		$this->findClassName();
 		$this->findFullClassName();
 		$this->findUsedNamespaces();
 		$this->structure 		= $this->structToObject($this->content);
 		$this->generateStruct();
 		return $this;
+	}
+
+	private function findClassName()
+	{
+		$fullName = '';
+		preg_match_all('/typestruct(.*?){/ims', $this->content, $matches);
+		if(isset($matches[1])) {
+			$this->info['name'] = trim($matches[1][0]);
+		}
 	}
 
 	private function findFullClassName()

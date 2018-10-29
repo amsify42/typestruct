@@ -106,9 +106,14 @@ use stdClass;";
 
 class {$this->info['name']} extends \Amsify42\TypeStruct\DataType\Struct
 {
-	function __construct(stdClass \$data, stdClass \$structure)
+	private \$struct = '".base64_encode(serialize($this->structure))."';
+
+	function __construct(stdClass \$data)
 	{
-		parent::__construct(\$data, \$structure);
+		if(is_string(\$this->struct)) {
+			\$this->struct = unserialize(base64_decode(\$this->struct));
+		}
+		parent::__construct(\$data, \$this->struct);
 	}
 }";
 		fwrite($fp, $content);
