@@ -3,22 +3,18 @@
 namespace Amsify42\TypeStruct\Core;
 
 use Amsify42\TypeStruct\TypeStruct;
+use Amsify42\TypeStruct\Core\Structure;
 use ReflectionClass;
+use stdClass;
 
 class Validator
 {
-	public $typeStruct;
-
 	protected $baseNameSpace;
 	protected $validateFull = true;
-
-	private $classLoaded = [];
 	protected $activeMethod;
 
-	function __construct()
-	{
-		$this->typeStruct = new TypeStruct();
-	}
+	private $classLoaded 	= [];
+	private $response 		= ['isValid' => true, 'messages' => []];
 
 	function __call($method, $arguments)
 	{
@@ -50,17 +46,9 @@ class Validator
 	private function getTypeStruct($struct, $data)
 	{
 		if(!$this->baseNameSpace || strpos($struct, $this->baseNameSpace) !== false) {
-			$this->typeStruct->setClass($struct);
-			$this->typeStruct->setValidateFull($this->validateFull);
-			$response 	= $this->typeStruct->validate($data);
-			if($response['isValid']) {
-				return $this->typeStruct->getTypeStruct();
-			} else {
-				$message = "Structure must be of type '{$struct}'\n";
-				$message .= "\nErrors:\n";
-				$message .= implode(", ", $response['messages']);
-				throw new \RuntimeException($message);
-			}
+			$typeStruct->setClass($struct);
+			$typeStruct->setValidateFull($this->validateFull);
+			return $typeStruct->getTypeStruct();
 		}
 		return $data;
 	}

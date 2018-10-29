@@ -99,15 +99,16 @@ class Resource
 		$content = "<?php";
 		if(isset($this->info['namespace']) && $this->info['namespace']) {
 			$content .= " 
-namespace {$this->info['namespace']};";
+namespace {$this->info['namespace']};
+use stdClass;";
 		}
 		$content .= "
 
-class {$this->info['name']} extends \Amsify42\TypeStruct\Core\Struct
+class {$this->info['name']} extends \Amsify42\TypeStruct\DataType\Struct
 {
-	function __construct(\$data)
+	function __construct(stdClass \$data, stdClass \$structure)
 	{
-		parent::__construct(\$data);
+		parent::__construct(\$data, \$structure);
 	}
 }";
 		fwrite($fp, $content);

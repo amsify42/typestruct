@@ -3,7 +3,6 @@
 namespace Amsify42\TypeStruct\Helper;
 
 use Amsify42\TypeStruct\DataType as DataTypes;
-use Amsify42\TypeStruct\Core\Struct;
 use stdClass;
 
 class DataType
@@ -46,13 +45,29 @@ class DataType
 	public static function getInstance($value, $type)
 	{
 		if(is_array($type)) {
-			return new DataTypes\TypeArray($value, isset($type['of'])? $type['of']: 'mixed');
+			if($value instanceof DataTypes\TypeArray) {
+				return $value;
+			} else {
+				return new DataTypes\TypeArray($value, isset($type['of'])? $type['of']: 'mixed');
+			}
 		} else if($type == 'string') {
-			return new DataTypes\TypeString($value);
+			if($value instanceof DataTypes\TypeString) {
+				return $value;
+			} else {
+				return new DataTypes\TypeString($value);
+			}
 		} else if($type == 'int') {
-			return new DataTypes\TypeInt($value);
+			if($value instanceof DataTypes\TypeInt) {
+				return $value;
+			} else {
+				return new DataTypes\TypeInt($value);
+			}
 		} else if($type == 'float') {
-			return new DataTypes\TypeFloat($value);
+			if($value instanceof DataTypes\TypeFloat) {
+				return $value;
+			} else {
+				return new DataTypes\TypeFloat($value);
+			}
 		} else {
 			return self::getValue($value);
 		}
@@ -90,6 +105,13 @@ class DataType
 				$type 		= 'array';
 				$isAssign 	= false;
 			}
+		} else if($property instanceof DataTypes\Struct) {
+			if(is_object($value)) {
+				return new DataTypes\Struct($value, $property->getStructure());
+			} else {
+				$type 		= 'Struct';
+				$isAssign 	= false;
+			}
 		}
 
 		if($isAssign) {
@@ -99,17 +121,145 @@ class DataType
 		}
 	}
 
-	public static function childToStruct($object, $isChild = false)
+	public static function childToStruct(stdClass $object, stdClass $structure, $isChild = false)
 	{
+		return $object;
 		$stdObject 	= new stdClass;
 		foreach($object as $name => $element)
 		{
 			if($element instanceof stdClass) {
-				$stdObject->{$name} = self::childToStruct($element, true);
+				$stdObject->{$name} = self::childToStruct($element, $structure->{$name}, true);
 			} else {
 				$stdObject->{$name} = $element;
 			}
 		}
-		return ($isChild)? new Struct($stdObject): $stdObject; 
+		return ($isChild)? new DataTypes\Struct($stdObject, $structure): $stdObject; 
+	}
+
+
+	public static function checkType($name, $value, $type)
+	{
+		$result = ['isValid' => true, 'message' => ''];
+		$type 	= trim(strtolower($type));
+		switch($type) {
+			case 'string':
+				if(!is_string($value) && !$value instanceof DataTypes\TypeString) {
+					$result['isValid'] 	= false;
+					$result['message'] 	= $name.' must be a string';
+				}
+				break;
+
+			case 'int':
+				if(!is_int($value) && !$value instanceof DataTypes\TypeInt) {
+					$result['isValid'] 	= false;
+					$result['message'] 	= $name.' must be a int';
+				}
+				break;
+
+			case 'float':
+				if(!is_float($value) && !$value instanceof DataTypes\TypeFloat) {
+					$result['isValid'] 	= false;
+					$result['message'] 	= $name.' must be a float';
+				}
+				break;
+			case 'boolean':
+				if(!is_bool($value)) {
+					$result['isValid'] 	= false;
+					$result['message'] 	= $name.' must be a boolean';
+				}
+				break;
+
+			case 'null':
+				if($value !== NULL) {
+					$result['isValid'] 	= false;
+					$result['message'] 	= $name.' must be null';
+				}
+				break;
+
+			case 'any':
+				break;	
+
+			default:
+				if(!self::isResource($value, $type)) {
+					$result['isValid'] 	= false;
+					$result['message'] 	= $name.' must be of type '.$type;
+				}
+				break;
+		}
+		return $result;
+	}
+
+	public static function isResource($value, $type)
+	{
+		return ($value instanceof $type);
+	}
+
+	public static function checkArrayType($name, $value, $info)
+	{
+		$result = ['isValid' => true, 'message' => '', 'value' => []];
+		if(isset($info['of'])) {
+			if($info['of'] == 'string') {
+				foreach($value as $vk => $el) {
+					if(!is_string($el)) {
+						$result['isValid'] 	= false;
+						$result['message'] 	= $name.' must be an array of string';
+						break;
+					} else {
+						$result['value'][$vk] = self::getInstance($el, 'string');
+					}
+				}
+			} else if($info['of'] == 'int') {
+				foreach($value as $vk => $el) {
+					if(!is_int($el)) {
+						$result['isValid'] 	= false;
+						$result['message'] 	= $name.' must be an array of int';
+						break;
+					} else {
+						$result['value'][$vk] = self::getInstance($el, 'int');
+					}
+				}
+			} else if($info['of'] == 'float') {
+				foreach($value as $vk => $el) {
+					if(!is_float($el)) {
+						$result['isValid'] 	= false;
+						$result['message'] 	= $name.' must be an array of float';
+						break;
+					} else {
+						$result['value'][$vk] = self::getInstance($el, 'float');
+					}
+				}
+			} else if($info['of'] == 'boolean') {
+				foreach($value as $vk => $el) {
+					if(!is_bool($el)) {
+						$result['isValid'] 	= false;
+						$result['message'] 	= $name.' must be an array of boolean';
+						break;
+					}
+				}
+			} else {
+				if(is_array($value)) {
+					foreach($value as $vk => $el) {
+						if(!self::isResource($el, $info['of'])) {
+							$result['isValid'] 	= false;
+							$result['message'] 	= $name.' must be array of type '.$info['of'];
+							break;
+						}
+					}	
+				} else {
+					$result['isValid'] 	= false;
+					$result['message'] 	= $name.' must be array of type '.$info['of'];
+				}
+			}
+		} else {
+			if(!is_array($value)) {
+				$result['isValid'] 	= false;
+				$result['message'] 	= $name.' must be array';
+			} else {
+				foreach($value as $vk => $el) {
+					$result['value'][$vk] = self::getValue($el);
+				}
+			}
+		}
+		return $result;
 	}
 }

@@ -28,26 +28,31 @@ if($test == 'core') {
 	//$passedData->someEl->record = new App\Record;
 	$passedData->someEl->records = [new \TestTS\resources\app\Record, new \TestTS\resources\app\Record];
 	//dumP($passedData);
-	$typeValidator->validate($passedData);
-	$struct = $typeValidator->getTypeStruct();
-	//dumP($struct); die;
+	//$typeValidator->validate($passedData);
+	$struct = $typeValidator->getTypeStruct($passedData);
+	dumP($struct); die;
 	
-	echo $struct->name.'<br/>';
-	$struct->id = 3;
-	echo ($struct->id->value()/2).'<br/>';
-	echo $struct->someEl->someChild->key4.'<br/>';
-	echo count($struct->items).'<br/>';
-	echo $struct->items[1].'<br/>';
-	foreach($struct->items as $key => $item) {
-		echo $item.'<br/>';	
-	}
+	// echo $struct->name.'<br/>';
+	// $struct->id = 3;
+	// echo ($struct->id->value()/2).'<br/>';
+	// echo $struct->someEl->someChild->key4.'<br/>';
+	// echo count($struct->items).'<br/>';
+	// echo $struct->items[1].'<br/>';
+	// foreach($struct->items as $key => $item) {
+	// 	echo $item.'<br/>';	
+	// }
 
 	dumP($struct->someEl->someChild->someAgainChild);
-	$struct->someEl->someChild->someAgainChild->key56 = [true, false, false];
-	dumP($struct->someEl->someChild->someAgainChild->key56);
+	$obj = new \stdClass();
+	$obj->id = 1;
+	$obj->name = 'sami';
+	$struct->someEl->someChild->someAgainChild = $obj;
 	dumP($struct->someEl->someChild->someAgainChild);
-	$struct->someEl->someChild->someAgainChild->key5 = 'new string';
-	dumP($struct->someEl->someChild->someAgainChild->key5);
+	// $struct->someEl->someChild->someAgainChild->key56 = [true, false, false];
+	// dumP($struct->someEl->someChild->someAgainChild->key56);
+	// dumP($struct->someEl->someChild->someAgainChild);
+	// $struct->someEl->someChild->someAgainChild->key5 = 'new string';
+	// dumP($struct->someEl->someChild->someAgainChild->key5);
 
 } else if($test == 'class') {
 
