@@ -28,6 +28,24 @@ class DataType
 		return $valid;	
 	}
 
+	public static function getType($value)
+	{
+		if(is_string($value)) {
+			return 'string';
+		} else if(is_int($value)) {
+			return 'integer';
+		} else if(is_float($value)) {
+			return 'float';
+		} else if(is_array($value)) {
+			return 'array';
+		} else if(is_bool($value)) {
+			return 'boolean';
+		} else if(is_object($value)) {
+			return 'object';
+		}
+		return 'different';
+	}
+
 	public static function getValue($value)
 	{
 		if(is_string($value)) {
@@ -117,7 +135,7 @@ class DataType
 		if($isAssign) {
 			return $value;
 		} else {
-			throw new \RuntimeException("Property: ".$name." -- Trying to assign '".gettype($value)."' expected '".$type."'");
+			throw new \RuntimeException("Property: ".$name." -- Trying to assign '".self::getType($value)."' expected '".$type."'");
 		}
 	}
 

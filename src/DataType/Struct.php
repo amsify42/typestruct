@@ -19,7 +19,7 @@ class Struct
 			$this->data 		= DataType::childToStruct($data, $structure);
 			$this->structure 	= $structure;
 		} else {
-			$message = "Structure must be of type '{get_called_class()}'\n";
+			$message = "Structure must be of type '".get_called_class()."'\n";
 			$message .= "\nErrors:\n";
 			$message .= implode(", ", $response['messages']);
 			throw new \RuntimeException($message);
