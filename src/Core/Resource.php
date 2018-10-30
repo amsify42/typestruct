@@ -81,13 +81,12 @@ class Resource
 
 	private function generateJson()
 	{
-		$getFile 		= json_decode($this->getJsonFile());
-		$fileUpdated 	= filemtime($this->info['path']);
-		if(!$getFile || ($getFile->updated != $fileUpdated)) {
-			$data 				= new stdClass();
-			$data->updated 		= $fileUpdated;
-			$data->structure 	= $this->structure;
-			$jsonData 			= json_encode($data);
+		$getFile = json_decode($this->getJsonFile());
+		$updated = filemtime($this->info['path']);
+		if(!$getFile || ($getFile->updated != $updated)) {
+			$data 			= new stdClass();
+			$data->updated 	= $updated;
+			$jsonData 		= json_encode($data);
 			file_put_contents($this->gInfo['json'], $jsonData);
 			$this->generateClass();
 		}
