@@ -135,11 +135,11 @@ class DataType
 		if($isAssign) {
 			return $value;
 		} else {
-			throw new \RuntimeException("Property: ".$name." -- Trying to assign '".self::getType($value)."' expected '".$type."'");
+			throw new \RuntimeException("Property: ".$name." - Trying to assign '".self::getType($value)."' expected '".$type."'");
 		}
 	}
 
-	public static function childToStruct(stdClass $object, stdClass $structure, $isChild = false)
+	public static function childToStruct(stdClass $object, stdClass $structure, bool $isChild = false)
 	{
 		return $object;
 		$stdObject 	= new stdClass;
@@ -151,7 +151,7 @@ class DataType
 				$stdObject->{$name} = $element;
 			}
 		}
-		return ($isChild)? new DataTypes\Struct($stdObject, $structure): $stdObject; 
+		return ($isChild)? new DataTypes\Struct($stdObject, $structure) :$stdObject; 
 	}
 
 
@@ -198,9 +198,13 @@ class DataType
 				break;	
 
 			default:
-				if(!self::isResource($value, $type)) {
-					$result['isValid'] 	= false;
-					$result['message'] 	= $name.' must be of type '.$type;
+				if(strpos($type, '\\') !== false || preg_match("/^[A-Z]/", $type)) {
+					if(!self::isResource($value, $type)) {
+						$result['isValid'] 	= false;
+						$result['message'] 	= $name.' must be of type '.$type;
+					}
+				} else {
+					throw new \RuntimeException("Invalid data type: ".$type);
 				}
 				break;
 		}
@@ -218,7 +222,7 @@ class DataType
 		if(isset($info['of'])) {
 			if($info['of'] == 'string') {
 				foreach($value as $vk => $el) {
-					if(!is_string($el)) {
+					if(!is_string($el) && !$value instanceof DataTypes\TypeString) {
 						$result['isValid'] 	= false;
 						$result['message'] 	= $name.' must be an array of string';
 						break;
@@ -228,7 +232,7 @@ class DataType
 				}
 			} else if($info['of'] == 'int') {
 				foreach($value as $vk => $el) {
-					if(!is_int($el)) {
+					if(!is_int($el) && !$value instanceof DataTypes\TypeString) {
 						$result['isValid'] 	= false;
 						$result['message'] 	= $name.' must be an array of int';
 						break;
@@ -238,7 +242,7 @@ class DataType
 				}
 			} else if($info['of'] == 'float') {
 				foreach($value as $vk => $el) {
-					if(!is_float($el)) {
+					if(!is_float($el) && !$value instanceof DataTypes\TypeString) {
 						$result['isValid'] 	= false;
 						$result['message'] 	= $name.' must be an array of float';
 						break;
@@ -255,7 +259,7 @@ class DataType
 					}
 				}
 			} else {
-				if(is_array($value)) {
+				if(is_array($value) || $value instanceof DataTypes\TypeArray) {
 					foreach($value as $vk => $el) {
 						if(!self::isResource($el, $info['of'])) {
 							$result['isValid'] 	= false;
@@ -269,7 +273,7 @@ class DataType
 				}
 			}
 		} else {
-			if(!is_array($value)) {
+			if(!is_array($value) && !$value instanceof DataTypes\TypeArray) {
 				$result['isValid'] 	= false;
 				$result['message'] 	= $name.' must be array';
 			} else {
