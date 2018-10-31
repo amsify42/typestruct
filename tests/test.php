@@ -30,7 +30,7 @@ if($test == 'core') {
 	//dumP($passedData);
 	//$typeValidator->validate($passedData);
 	$struct = $typeValidator->getTypeStruct($passedData);
-	dumP($struct); die;
+	//dumP($struct); die;
 	
 	// echo $struct->name.'<br/>';
 	// $struct->id = 3;
@@ -41,13 +41,17 @@ if($test == 'core') {
 	// foreach($struct->items as $key => $item) {
 	// 	echo $item.'<br/>';	
 	// }
+	// die;
 
 	dumP($struct->someEl->someChild->someAgainChild);
 	$obj = new \stdClass();
-	$obj->id = 1;
-	$obj->name = 'sami';
+	$obj->key5 = 'string';
+	$obj->key6 = new Amsify42\TypeStruct\DataType\TypeFloat(2);
+	$obj->key56 = [true, false, false];
 	$struct->someEl->someChild->someAgainChild = $obj;
 	dumP($struct->someEl->someChild->someAgainChild);
+
+
 	// $struct->someEl->someChild->someAgainChild->key56 = [true, false, false];
 	// dumP($struct->someEl->someChild->someAgainChild->key56);
 	// dumP($struct->someEl->someChild->someAgainChild);

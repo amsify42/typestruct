@@ -141,7 +141,6 @@ class DataType
 
 	public static function childToStruct(stdClass $object, stdClass $structure, bool $isChild = false)
 	{
-		return $object;
 		$stdObject 	= new stdClass;
 		foreach($object as $name => $element)
 		{
@@ -219,7 +218,7 @@ class DataType
 	public static function checkArrayType($name, $value, $info)
 	{
 		$result = ['isValid' => true, 'message' => '', 'value' => []];
-		if(isset($info['of'])) {
+		if(isset($info['of']) && (is_array($value) || $value instanceof DataTypes\TypeArray)) {
 			if($info['of'] == 'string') {
 				foreach($value as $vk => $el) {
 					if(!is_string($el) && !$value instanceof DataTypes\TypeString) {

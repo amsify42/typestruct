@@ -32,17 +32,21 @@ class Structure
 		$structure 	= ($dictionary)? $dictionary: $this->structure;
 		$result 	= ['isValid' => true, 'message' => '', 'path' => ''];
 		foreach($structure as $name => $type) {
-			if(!isset($data->{$name}) && $type != 'any' && strtolower($type) != 'null') {
-				$result['isValid'] 	= false;
-				$result['message'] 	= $name.' is not defined';
-				$result['path']    .= $name.$this->token;
-				if($this->validateFull) {
-					$this->response['messages'][pathKey($path, $name, $this->token)] = $result['message'];
-				} else {
-					break;
+			if(!isset($data->{$name})) {
+				if(is_array($type) || ($type != 'any' && strtolower($type) != 'null')) {
+					$result['isValid'] 	= false;
+					$result['message'] 	= $name.' is not defined';
+					$result['path']    .= $name.$this->token;
+					if($this->validateFull) {
+						$this->response['messages'][pathKey($path, $name, $this->token)] = $result['message'];
+					} else {
+						break;
+					}
 				}
 			} else {
-				if(is_object($type)) {
+				if($data->{$name} instanceof \Amsify42\TypeStruct\DataType\Struct) {
+					continue;
+				} else if(is_object($type)) {
 					$childPath 	= ($path)? $path.$this->token.$name: $name;
 					$validated 	= $this->iterateDictionary($data->{$name}, $childPath, $type);
 					if(!$validated['isValid']) {
