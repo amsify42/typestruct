@@ -96,10 +96,11 @@ if($test == 'core') {
 } else if($test == 'autoload') {
 
 	$autoLoader = new Amsify42\TypeStruct\AutoLoader();
-	$autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
+	//$autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
 	$autoLoader->setCustom(function($class){
-		$pathInfo 	= pathinfo($class);
-		return __DIR__.'/resources/structs/'.$pathInfo['filename'].'.php';
+		$someInfo 	= explode('\\', $class);
+		$name 		= end($someInfo);
+		return __DIR__."/resources/structs/".$name.".php";
 	});
 	$autoLoader->register();
 
