@@ -8,6 +8,11 @@ class Resource
 {
 	protected $gInfo = [];
 
+	public function __construct()
+	{
+		if(!defined('TS_SRC_PATH')) define('TS_SRC_PATH', __DIR__.'/..');
+	}
+
 	protected function getAutoloadPsr4Path($class)
 	{
 		$classPath 	= NULL;

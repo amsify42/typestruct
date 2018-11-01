@@ -18,14 +18,14 @@ class TypeStruct extends Resource
 
 	public 	$info 			= [];
 
-	public function __construct()
-	{
-		define('TS_SRC_PATH', __DIR__);
-	}
-
 	public function setToken($token = '->')
 	{
 		$this->token = $token;
+	}
+
+	public function setValidateFull($isFull)
+	{
+		$this->validateFull = $isFull;
 	}
 
 	public function setClass($class)
@@ -45,9 +45,9 @@ class TypeStruct extends Resource
 		$this->extractStructure();
 	}
 
-	public function setValidateFull($isFull)
+	public function getActualPath()
 	{
-		$this->validateFull = $isFull;
+		return isset($this->gInfo['php'])? $this->gInfo['php']: NULL;
 	}
 
 	private function extractStructure()

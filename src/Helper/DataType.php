@@ -12,15 +12,15 @@ class DataType
 		$valid = false;
 		if($type == 'mixed') {
 			$valid = true;
-		} else if(is_string($value)) {
+		} else if(is_string($value) || $value instanceof DataTypes\TypeString) {
 			if($type == 'string') $valid = true;
-		} else if(is_int($value)) {
+		} else if(is_int($value) || $value instanceof DataTypes\TypeInt) {
 			if($type == 'int') $valid = true;
-		} else if(is_float($value)) {
+		} else if(is_float($value) || $value instanceof DataTypes\TypeFloat) {
 			if($type == 'float') $valid = true;
-		} else if(is_array($value)) {
+		} else if(is_array($value) || $value instanceof DataTypes\TypeArray) {
 			if($type == 'array') $valid = true;
-		} else if(is_bool($value)) {
+		} else if(is_bool($value) || $value instanceof DataTypes\TypeBool) {
 			if($type == 'boolean') $valid = true;
 		} else if(is_object($value)) {
 			if($value instanceof $type) $valid = true;
@@ -56,6 +56,8 @@ class DataType
 			return new DataTypes\TypeFloat($value);
 		} else if(is_array($value)) {
 			return new DataTypes\TypeArray($value);
+		} else if(is_bool($value)) {
+			return new DataTypes\TypeBool($value);
 		}
 		return $value;
 	}
@@ -86,6 +88,12 @@ class DataType
 			} else {
 				return new DataTypes\TypeFloat($value);
 			}
+		} else if($type == 'bool') {
+			if($value instanceof DataTypes\TypeBool) {
+				return $value;
+			} else {
+				return new DataTypes\TypeBool($value);
+			}
 		} else {
 			return self::getValue($value);
 		}
@@ -112,6 +120,13 @@ class DataType
 		} else if($property instanceof DataTypes\TypeFloat) {
 			if(is_float($value)) {
 				return new DataTypes\TypeFloat($value);
+			} else {
+				$type 		= 'float';
+				$isAssign 	= false;
+			}
+		} else if($property instanceof DataTypes\TypeBool) {
+			if(is_bool($value)) {
+				return new DataTypes\TypeBool($value);
 			} else {
 				$type 		= 'float';
 				$isAssign 	= false;
@@ -180,7 +195,7 @@ class DataType
 				}
 				break;
 			case 'boolean':
-				if(!is_bool($value)) {
+				if(!is_bool($value) && !$value instanceof DataTypes\TypeBool) {
 					$result['isValid'] 	= false;
 					$result['message'] 	= $name.' must be a boolean';
 				}
@@ -221,7 +236,7 @@ class DataType
 		if(isset($info['of']) && (is_array($value) || $value instanceof DataTypes\TypeArray)) {
 			if($info['of'] == 'string') {
 				foreach($value as $vk => $el) {
-					if(!is_string($el) && !$value instanceof DataTypes\TypeString) {
+					if(!is_string($el) && !$el instanceof DataTypes\TypeString) {
 						$result['isValid'] 	= false;
 						$result['message'] 	= $name.' must be an array of string';
 						break;
@@ -231,7 +246,7 @@ class DataType
 				}
 			} else if($info['of'] == 'int') {
 				foreach($value as $vk => $el) {
-					if(!is_int($el) && !$value instanceof DataTypes\TypeString) {
+					if(!is_int($el) && !$el instanceof DataTypes\TypeInt) {
 						$result['isValid'] 	= false;
 						$result['message'] 	= $name.' must be an array of int';
 						break;
@@ -241,7 +256,7 @@ class DataType
 				}
 			} else if($info['of'] == 'float') {
 				foreach($value as $vk => $el) {
-					if(!is_float($el) && !$value instanceof DataTypes\TypeString) {
+					if(!is_float($el) && !$el instanceof DataTypes\TypeFloat) {
 						$result['isValid'] 	= false;
 						$result['message'] 	= $name.' must be an array of float';
 						break;
@@ -251,7 +266,7 @@ class DataType
 				}
 			} else if($info['of'] == 'boolean') {
 				foreach($value as $vk => $el) {
-					if(!is_bool($el)) {
+					if(!is_bool($el) && !$el instanceof DataTypes\TypeBool) {
 						$result['isValid'] 	= false;
 						$result['message'] 	= $name.' must be an array of boolean';
 						break;

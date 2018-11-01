@@ -17,7 +17,7 @@ class Structure
 		$this->structure = $structure;
 	}
 
-	public function setValidateFull(boolean $isFull)
+	public function setValidateFull(bool $isFull)
 	{
 		$this->validateFull = $isFull;
 	}

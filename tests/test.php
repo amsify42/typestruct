@@ -8,12 +8,13 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
 $execTime 	= true;
-$test 		= 'core'; // ('core', 'class')
+$test 		= 'autoload'; // ('core', 'class', 'simple', 'autoload')
 
 
 if($execTime) $start = microtime(true);
 
 if($test == 'core') {
+
 	$typeValidator = new Amsify42\TypeStruct\TypeStruct();
 	// Set Class
 	$typeValidator->setClass(\TestTS\resources\structs\Struct::class);
@@ -30,6 +31,7 @@ if($test == 'core') {
 	//dumP($passedData);
 	//$typeValidator->validate($passedData);
 	$struct = $typeValidator->getTypeStruct($passedData);
+	//$struct = 1;
 	//dumP($struct); die;
 	
 	// echo $struct->name.'<br/>';
@@ -43,35 +45,73 @@ if($test == 'core') {
 	// }
 	// die;
 
-	dumP($struct->someEl->someChild->someAgainChild);
-	$obj = new \stdClass();
-	$obj->key5 = 'string';
-	$obj->key6 = new Amsify42\TypeStruct\DataType\TypeFloat(2);
-	$obj->key56 = [true, false, false];
-	$struct->someEl->someChild->someAgainChild = $obj;
-	dumP($struct->someEl->someChild->someAgainChild);
-
-
-	// $struct->someEl->someChild->someAgainChild->key56 = [true, false, false];
-	// dumP($struct->someEl->someChild->someAgainChild->key56);
 	// dumP($struct->someEl->someChild->someAgainChild);
-	// $struct->someEl->someChild->someAgainChild->key5 = 'new string';
-	// dumP($struct->someEl->someChild->someAgainChild->key5);
+	// $obj = new \stdClass();
+	// $obj->key5 = 'string';
+	// $obj->key6 = new Amsify42\TypeStruct\DataType\TypeFloat(2);
+	// $obj->key56 = [false, false, true];
+	// $struct->someEl->someChild->someAgainChild = $obj;
+	// dumP($struct->someEl->someChild->someAgainChild);
+
+
+	$struct->someEl->someChild->someAgainChild->key56 = [true, false, false];
+	dumP($struct->someEl->someChild->someAgainChild->key56);
+	dumP($struct->someEl->someChild->someAgainChild);
+	$struct->someEl->someChild->someAgainChild->key5 = 'new string';
+	dumP($struct->someEl->someChild->someAgainChild->key5);
 
 } else if($test == 'class') {
+
+	$autoLoader = new Amsify42\TypeStruct\AutoLoader();
+	$autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
+	$autoLoader->register();
+
+	$object 		= new \stdClass();
+	$object->id 	= 42;
+	$object->name 	= 'Prod42';
+	$object->price 	= new Amsify42\TypeStruct\DataType\TypeFloat(42);
+	$object->mixed 	= '4354';
+	$myclass 		= new \TestTS\MyTiClass();
+	$myclass->test(new \TestTS\resources\structs\Simple($object), 2);
+
+	$simple 		= $myclass->getSimple();
+	$simple->id 	= 2;
+	dumP($simple->id);
+	echo $simple->id;
+
+} else if($test == 'simple') {
+
+	$autoLoader = new Amsify42\TypeStruct\AutoLoader();
+	$autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
+	$autoLoader->register();
 
 	$object 		= new \stdClass();
 	$object->id 	= 42;
 	$object->name 	= 'Prod42';
 	$object->price 	= 42.42;
 	$object->mixed 	= '4354';
-	$myclass 		= new \TestTS\MyTiClass();
-	$myclass->test($object, 2);
+	$struct 		= new \TestTS\resources\structs\Simple($object);
+	dumP($struct);
 
-	$simple 		= $myclass->getSimple();
-	$simple->id = 2;
-	dumP($simple->id);
-	echo $simple->id;
+} else if($test == 'autoload') {
+
+	$autoLoader = new Amsify42\TypeStruct\AutoLoader();
+	$autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
+	$autoLoader->setCustom(function($class){
+		$pathInfo 	= pathinfo($class);
+		return __DIR__.'/resources/structs/'.$pathInfo['filename'].'.php';
+	});
+	$autoLoader->register();
+
+	$object 		= new \stdClass();
+	$object->id 	= 42;
+	$object->name 	= 'Prod42';
+	$object->price 	= 42.42;
+	$object->mixed 	= '4354';
+	$struct 		= new \TestTS\resources\structs\Simple($object);
+	dumP($struct);
+	//dumP($struct);
+	
 }
 
 if($execTime) executionTime($start);

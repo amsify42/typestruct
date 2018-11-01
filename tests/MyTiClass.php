@@ -4,24 +4,21 @@ namespace TestTS;
 
 use \TestTS\resources\structs\Simple;
 
-class MyTiClass extends \Amsify42\TypeStruct\Core\Validator
+class MyTiClass
 {
-	protected $baseNameSpace 	= \TestTS\resources\structs::class;
-	protected $validateFull 	= true;
-
-	protected function test(Simple $simple, $id)
+	public function test(Simple $simple, $id)
 	{
 		dumP($simple, $id);
 	}
 
-	protected function getSimple(): Simple
+	public function getSimple(): Simple
 	{
 		$object 		= new \stdClass();
 		$object->id 	= 42;
 		$object->name 	= 'Prod42';
 		$object->price 	= 42.42;
 		$object->mixed 	= 'dfgfd';
-		return $this->validateReturn($object);
+		return new Simple($object);
 	}
 }
 
