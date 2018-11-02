@@ -99,8 +99,10 @@ class Resource
 
 	private function generateClass()
 	{
-		$fp = fopen($this->gInfo['php'], 'w');
-		$content = "<?php";
+		//dumP($this->validateFull); die;
+		$fp 		= fopen($this->gInfo['php'], 'w');
+		$isFull 	= ($this->validateFull)? 'true': 'false';
+		$content 	= "<?php";
 		if(isset($this->info['namespace']) && $this->info['namespace']) {
 			$content .= " 
 namespace {$this->info['namespace']};
@@ -117,7 +119,7 @@ class {$this->info['name']} extends \Amsify42\TypeStruct\DataType\Struct
 		if(is_string(\$this->struct)) {
 			\$this->struct = unserialize(base64_decode(\$this->struct));
 		}
-		parent::__construct(\$data, \$this->struct);
+		parent::__construct(\$data, \$this->struct, {$isFull});
 	}
 }";
 		fwrite($fp, $content);

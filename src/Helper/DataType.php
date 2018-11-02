@@ -154,25 +154,25 @@ class DataType
 		}
 	}
 
-	public static function childToStruct(stdClass $object, stdClass $structure, bool $isChild = false)
+	public static function childToStruct(stdClass $object, stdClass $structure, bool $isChild = false, bool $isValidateFull = false)
 	{
 		$stdObject 	= new stdClass;
 		foreach($object as $name => $element)
 		{
 			if($element instanceof stdClass) {
-				$stdObject->{$name} = self::childToStruct($element, $structure->{$name}, true);
+				$stdObject->{$name} = self::childToStruct($element, $structure->{$name}, true, $isValidateFull);
 			} else {
 				$stdObject->{$name} = $element;
 			}
 		}
-		return ($isChild)? new DataTypes\Struct($stdObject, $structure) :$stdObject; 
+		return ($isChild)? new DataTypes\Struct($stdObject, $structure, $isValidateFull) :$stdObject; 
 	}
 
 
 	public static function checkType($name, $value, $type)
 	{
 		$result = ['isValid' => true, 'message' => ''];
-		$type 	= trim(strtolower($type));
+		$type 	= trim($type);
 		switch($type) {
 			case 'string':
 				if(!is_string($value) && !$value instanceof DataTypes\TypeString) {
@@ -215,7 +215,7 @@ class DataType
 				if(strpos($type, '\\') !== false || preg_match("/^[A-Z]/", $type)) {
 					if(!self::isResource($value, $type)) {
 						$result['isValid'] 	= false;
-						$result['message'] 	= $name.' must be of type '.$type;
+						$result['message'] 	= $name.' must be of type class: '.$type;
 					}
 				} else {
 					throw new \RuntimeException("Invalid data type: ".$type);

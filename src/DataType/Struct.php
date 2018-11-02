@@ -8,21 +8,29 @@ use stdClass;
 
 class Struct
 {
-	protected $structure;
 	protected $data;
+	protected $structure;
 
-	function __construct(stdClass $data, stdClass $structure)
+	private $validateFull;
+	private $response 	= [];
+	private $isValid 	= false;
+
+	function __construct(stdClass $data, stdClass $structure, bool $validateFull = true)
 	{
-		$struct 	= new Structure($structure);
-		$response 	= $struct->validate($data);
-		if($response['isValid']) {
-			$this->data 		= DataType::childToStruct($data, $structure);
+		$this->validateFull = $validateFull;
+		$struct 			= new Structure($structure);
+		$struct->setValidateFull($this->validateFull);
+		$this->response 	= $struct->validate($data);
+		if($this->response['isValid']) {
+			$this->data 		= DataType::childToStruct($data, $structure, false, $this->validateFull);
 			$this->structure 	= $structure;
+			$this->isValid 		= true;
 		} else {
-			$message = "Structure must be of type '".get_called_class()."'\n";
-			$message .= "\nErrors:\n";
-			$message .= implode(", ", $response['messages']);
-			throw new \RuntimeException($message);
+			// $message = "Structure must be of type '".get_called_class()."'\n";
+			// $message .= "\nErrors:\n";
+			// $message .= implode(", ", $response['messages']);
+			// throw new \RuntimeException($message);
+			$this->isValid 		= false;
 		}
 	}
 
@@ -50,5 +58,15 @@ class Struct
 	public function getStructure()
 	{
 		return $this->structure;
+	}
+
+	public function isValidateFull()
+	{
+		return $this->validateFull;
+	}
+
+	public function getResponse()
+	{
+		return $this->response;
 	}
 }

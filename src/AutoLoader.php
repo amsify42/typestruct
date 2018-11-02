@@ -8,7 +8,7 @@ class AutoLoader
 {	
 	private $typeStruct;
 	private $baseNameSpace;
-	//private $callback;
+	private $callback;
 	private $validateFull 	= true;
 
 	function __construct()
@@ -40,11 +40,12 @@ class AutoLoader
 	public function autoload($class)
 	{
 		$actualPath = NULL;
-		if(!$this->baseNameSpace || strpos($class, $this->baseNameSpace) !== false) {
+		if(strpos($class, $this->baseNameSpace) !== false) {
 			if($this->callback) {
 				$path = $this->callback->call($this, $class);
 				if($path) {
 					$this->typeStruct->setPath($path);
+					$this->typeStruct->setValidateFull($this->validateFull);
 					$actualPath = $this->typeStruct->getActualPath();
 				}
 			} else {
@@ -52,7 +53,7 @@ class AutoLoader
 				$this->typeStruct->setValidateFull($this->validateFull);
 				$actualPath = $this->typeStruct->getActualPath();
 			}
-			if($actualPath) {
+			if(is_file($actualPath)) {
 				require_once $actualPath;
 			}
 		}

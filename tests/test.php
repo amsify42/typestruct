@@ -96,21 +96,21 @@ if($test == 'core') {
 } else if($test == 'autoload') {
 
 	$autoLoader = new Amsify42\TypeStruct\AutoLoader();
-	//$autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
+	$autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
+	$autoLoader->setValidateFull(false);
 	$autoLoader->setCustom(function($class){
 		$someInfo 	= explode('\\', $class);
-		$name 		= end($someInfo);
-		return __DIR__."/resources/structs/".$name.".php";
+		return __DIR__."/resources/structs/".end($someInfo).".php";
 	});
 	$autoLoader->register();
 
 	$object 		= new \stdClass();
 	$object->id 	= 42;
 	$object->name 	= 'Prod42';
-	$object->price 	= 42.42;
+	$object->price 	= 42;
 	$object->mixed 	= '4354';
 	$struct 		= new \TestTS\resources\structs\Simple($object);
-	dumP($struct);
+	dumP($struct->getResponse());
 	//dumP($struct);
 	
 }

@@ -12,8 +12,8 @@ class TypeStruct extends Resource
 	private $originalContent;
 	private $content;
 	private $token 			= '->';
-	private $validateFull 	= false;
 
+	protected $validateFull = false;
 	protected $structure;
 
 	public 	$info 			= [];
@@ -23,7 +23,7 @@ class TypeStruct extends Resource
 		$this->token = $token;
 	}
 
-	public function setValidateFull($isFull)
+	public function setValidateFull(bool $isFull)
 	{
 		$this->validateFull = $isFull;
 	}
@@ -149,7 +149,7 @@ class TypeStruct extends Resource
 		$this->info['data'] = (object)$data;
 		require_once $this->gInfo['php'];
 		$class 		= "\\".$this->info['full_name'];
-		$struct 	= new $class($this->info['data'], $this->structure);
+		$struct 	= new $class($this->info['data'], $this->structure, $this->validateFull);
 		return $struct;
 	}
 
