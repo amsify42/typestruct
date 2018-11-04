@@ -13,7 +13,12 @@ class Resource
 		if(!defined('TS_SRC_PATH')) define('TS_SRC_PATH', __DIR__.'/..');
 	}
 
-	protected function getAutoloadPsr4Path($class)
+	/**
+	 * Get Autoload Psr4 Path
+	 * @param  string $class [full name of class with namespace]
+	 * @return string        [file path of class based on psr4 autoloading]
+	 */
+	protected function getAutoloadPsr4Path(string $class): string
 	{
 		$classPath 	= NULL;
 		$appLevel 	= false;
@@ -50,7 +55,14 @@ class Resource
 		return $classPath;
 	}
 
-	private function isClassPath($namespaces, $class, $directory)
+	/**
+	 * Checks whether the class name contains the psr4 namespace which is defined in composer.json
+	 * @param  array  	$namespaces
+	 * @param  string  	$class
+	 * @param  string  	$directory
+	 * @return boolean
+	 */
+	private function isClassPath(array $namespaces, string $class, string $directory): bool
 	{
 		$classPath = NULL;
 		foreach($namespaces as $namespace => $dir) {
@@ -67,13 +79,21 @@ class Resource
 		return $classPath;
 	}
 
-	protected function generateStruct()
+	/**
+	 * Generate directory and class for given struct
+	 * @return void
+	 */
+	protected function generateStruct(): void
 	{
 		$this->generateDirectory();
 		$this->generateJson();
 	}
 
-	private function generateDirectory()
+	/**
+	 * Generate Directory for typestruct class
+	 * @return void
+	 */
+	private function generateDirectory(): void
 	{
 		$this->gInfo['name'] 	= tsencode($this->info['full_name']);
 		$this->gInfo['dir'] 	= resource('generate/'.$this->gInfo['name']);
@@ -84,7 +104,11 @@ class Resource
 		$this->gInfo['php'] 	= $this->gInfo['dir'].'/'.$this->gInfo['name'].'.php';
 	}
 
-	private function generateJson()
+	/**
+	 * Generate Json for storing updated time of typestruct file
+	 * @return void
+	 */
+	private function generateJson(): void
 	{
 		$getFile = json_decode($this->getJsonFile());
 		$updated = filemtime($this->info['path']);
@@ -97,9 +121,12 @@ class Resource
 		}
 	}
 
-	private function generateClass()
+	/**
+	 * Generate typestruct equivalent class
+	 * @return void
+	 */
+	private function generateClass(): void
 	{
-		//dumP($this->validateFull); die;
 		$fp 		= fopen($this->gInfo['php'], 'w');
 		$isFull 	= ($this->validateFull)? 'true': 'false';
 		$content 	= "<?php";
@@ -126,6 +153,10 @@ class {$this->info['name']} extends \Amsify42\TypeStruct\DataType\Struct
 		fclose($fp);
 	}
 
+	/**
+	 * Get Json file if existing
+	 * @return jsonString|NULL
+	 */
 	private function getJsonFile()
 	{
 		return (is_file($this->gInfo['json']))? file_get_contents($this->gInfo['json']): NULL;

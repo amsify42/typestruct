@@ -107,7 +107,7 @@ if($test == 'core') {
 	$object 		= new \stdClass();
 	$object->id 	= 42;
 	$object->name 	= 'Prod42';
-	$object->price 	= 42;
+	$object->price 	= 42.0;
 	$object->mixed 	= '4354';
 	$struct 		= new \TestTS\resources\structs\Simple($object);
 	dumP($struct->getResponse());

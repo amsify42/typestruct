@@ -7,9 +7,28 @@ use stdClass;
 
 class Structure
 {
+	/**
+	 * Structure of typestruct file as object
+	 * @var object
+	 */
 	private $structure;
+
+	/**
+	 * Decides whether to send single type error or of complete object
+	 * @var boolean
+	 */
 	private $validateFull 	= true;
+
+	/**
+	 * For locating key path with token between them
+	 * @var string
+	 */
 	private $token 			= '->';
+
+	/**
+	 * Response data after validations
+	 * @var array
+	 */
 	private $response 		= ['isValid' => true, 'messages' => []];
 
 	function __construct(stdClass $structure)
@@ -17,17 +36,32 @@ class Structure
 		$this->structure = $structure;
 	}
 
-	public function setValidateFull(bool $isFull)
+	/**
+	 * Set Full Validation for full error messages needs to be returned
+	 * @param bool $isFull
+	 */
+	public function setValidateFull(bool $isFull): void
 	{
 		$this->validateFull = $isFull;
 	}
 
-	public function setToken(string $token = '->')
+	/**
+	 * Set Token for object key path
+	 * @param string $token
+	 */
+	public function setToken(string $token = '->'): void
 	{
 		$this->token = $token;
 	} 
 
-	private function iterateDictionary(stdClass $data, string $path = null, stdClass $dictionary = null)
+	/**
+	 * Validates the key value pair of object
+	 * @param  stdClass      $data
+	 * @param  string|null   $path
+	 * @param  stdClass|null $dictionary
+	 * @return array
+	 */
+	private function iterateDictionary(stdClass $data, string $path = null, stdClass $dictionary = null): array
 	{
 		$structure 	= ($dictionary)? $dictionary: $this->structure;
 		$result 	= ['isValid' => true, 'message' => '', 'path' => ''];
@@ -91,7 +125,12 @@ class Structure
 		return $result;
 	}
 
-	public function validate(stdClass $data)
+	/**
+	 * Validate the given object with types info
+	 * @param  stdClass $data [description]
+	 * @return array
+	 */
+	public function validate(stdClass $data): array
 	{
 		$response = $this->iterateDictionary($data);
 		if($this->validateFull && sizeof($this->response['messages'])> 0) {

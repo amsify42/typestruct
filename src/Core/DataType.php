@@ -13,7 +13,11 @@ class DataType
 		}
 	}
 
-	public function getType()
+	/**
+	 * Get Type of value
+	 * @return string
+	 */
+	public function getType(): string
 	{
 		return gettype($this->value);
 	}

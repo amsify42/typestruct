@@ -7,28 +7,77 @@ use stdClass;
 
 class TypeStruct extends Resource
 {
+	/**
+	 * Reserved data types
+	 * @var array
+	 */
 	private $reservedTypes 	= ['string', 'int', 'float', 'boolean', 'null', 'any']; 
+
+	/**
+	 * Array type names
+	 * @var array
+	 */
 	private $arrayTypes 	= ['array', '[]', 'string', 'int', 'float', 'boolean'];
+
+	/**
+	 * Original content of typestruct file
+	 * @var string
+	 */
 	private $originalContent;
+
+	/**
+	 * Extracted content of typestruct file after removing comments
+	 * @var string
+	 */
 	private $content;
+
+	/**
+	 * For locating key path with token between them
+	 * @var string
+	 */
 	private $token 			= '->';
 
+	/**
+	 * Decides whether to send single type error or of complete object
+	 * @var boolean
+	 */
 	protected $validateFull = false;
+
+	/**
+	 * Structure of typestruct file as object
+	 * @var object
+	 */
 	protected $structure;
 
+	/**
+	 * Info of typestruct file
+	 * @var array
+	 */
 	public 	$info 			= [];
 
-	public function setToken($token = '->')
+	/**
+	 * Set Token for object key path
+	 * @param string $token
+	 */
+	public function setToken(string $token = '->'): void
 	{
 		$this->token = $token;
 	}
 
-	public function setValidateFull(bool $isFull)
+	/**
+	 * Set Full Validation for full error messages needs to be returned
+	 * @param bool $isFull
+	 */
+	public function setValidateFull(bool $isFull): void
 	{
 		$this->validateFull = $isFull;
 	}
 
-	public function setClass($class)
+	/**
+	 * Set class name of typestruct for validating 
+	 * @param string $class
+	 */
+	public function setClass(string $class): void
 	{
 		$path = $this->getAutoloadPsr4Path($class);
 		if($path) {
@@ -39,18 +88,30 @@ class TypeStruct extends Resource
 		}
 	}
 
-	public function setPath($path)
+	/**
+	 * Set path of typestruct for validating
+	 * @param string $path
+	 */
+	public function setPath(string $path): void
 	{
 		$this->info['path'] = $path;
 		$this->extractStructure();
 	}
 
-	public function getActualPath()
+	/**
+	 * Get Actual generated Path
+	 * @return string
+	 */
+	public function getActualPath(): string
 	{
 		return isset($this->gInfo['php'])? $this->gInfo['php']: NULL;
 	}
 
-	private function extractStructure()
+	/**
+	 * Extract structure from typestruct file
+	 * @return TypeStruct
+	 */
+	private function extractStructure(): TypeStruct
 	{
 		$pathInfo 				= pathinfo($this->info['path']);
 		$this->info['name'] 	= $pathInfo['filename'];
@@ -67,7 +128,11 @@ class TypeStruct extends Resource
 		return $this;
 	}
 
-	private function findClassName()
+	/**
+	 * Find class name of typestruct
+	 * @return void
+	 */
+	private function findClassName(): void
 	{
 		$fullName = '';
 		preg_match_all('/typestruct(.*?){/ims', $this->content, $matches);
@@ -76,7 +141,11 @@ class TypeStruct extends Resource
 		}
 	}
 
-	private function findFullClassName()
+	/**
+	 * Find full class name of typestruct
+	 * @return void
+	 */
+	private function findFullClassName(): void
 	{
 		$fullName = '';
 		preg_match_all('/namespace(.*?);/ims', $this->content, $matches);
@@ -89,7 +158,11 @@ class TypeStruct extends Resource
 		$this->info['full_name'] = $fullName;
 	}
 
-	private function findUsedNamespaces()
+	/**
+	 * Find used namespaces of typestruct
+	 * @return void
+	 */
+	private function findUsedNamespaces(): void
 	{
 		$classes = [];
 		preg_match_all('/use(.*?);/ims', $this->content, $matches);
@@ -99,17 +172,30 @@ class TypeStruct extends Resource
 		$this->info['used_classes'] = $classes;
 	}
 
-	public function getStructure()
+	/**
+	 * Get Structure of typestruct file
+	 * @return object
+	 */
+	public function getStructure(): object
 	{
 		return $this->structure;
 	}
 
-	public function toJson()
+	/**
+	 * Convert structure to json
+	 * @return jsonString
+	 */
+	public function toJson(): string
 	{
 		return json_encode($this->structure);
 	}
-
-	public function structToObject($structString)
+	
+	/**
+	 * Convert structure to object
+	 * @param  string $structString [description]
+	 * @return object
+	 */
+	public function structToObject(string $structString): object
 	{
 		$structure 	= new stdClass();
 		$pairs 		= $this->extractDictionary($structString);
@@ -142,6 +228,11 @@ class TypeStruct extends Resource
 		return $structure;
 	}
 
+	/**
+	 * Get TypeStruct class instance
+	 * @param  array|object $data
+	 * @return instance
+	 */
 	public function getTypeStruct($data)
 	{
 		if(!is_array($data) && !is_object($data)) 
@@ -153,18 +244,33 @@ class TypeStruct extends Resource
 		return $struct;
 	}
 
-	private function findArrayType($type)
+	/**
+	 * Find Array Type of key
+	 * @param  string $type
+	 * @return string
+	 */
+	private function findArrayType(string $type): string
 	{
 		$infoArr = array_filter(explode('[]', $type));
 		return (sizeof($infoArr)> 0 && trim($infoArr[0]))? $infoArr[0]: '[]';
 	}
 
-	private function isTypeArray($type)
+	/**
+	 * Check if type is array
+	 * @param  string  $type
+	 * @return boolean
+	 */
+	private function isTypeArray(string $type): bool
 	{
 		return (preg_match("/(array|\[\])/i", $type));
 	}
 
-	private function isValidType($type)
+	/**
+	 * Check if type is valid
+	 * @param  string  $type
+	 * @return array
+	 */
+	private function isValidType(string $type): array
 	{
 		$type 	= trim($type);
 		$result = ['isValid' => false, 'type' => ''];
@@ -198,7 +304,12 @@ class TypeStruct extends Resource
 		return $result;
 	}
 
-	private function checkResourceType($type)
+	/**
+	 * Check Resource Type full class name
+	 * @param  string $type
+	 * @return string
+	 */
+	private function checkResourceType(string $type): string
 	{
 		$resource 	= $type;
 		$found 		= false;
@@ -215,7 +326,12 @@ class TypeStruct extends Resource
 		return $info;
 	}
 
-	public function extractDictionary($string)
+	/**
+	 * Extract Dictionary from typestruct file
+	 * @param  string $string
+	 * @return array
+	 */
+	public function extractDictionary(string $string): array
 	{
 		preg_match_all('/{((?:[^{}]*|(?R))*)}/x', $string, $matches);
 		return isset($matches[1])? $matches[1]: [];

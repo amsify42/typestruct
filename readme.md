@@ -1,4 +1,4 @@
 
-## TypeInterface
+## TypeStruct
 
 Under Development...

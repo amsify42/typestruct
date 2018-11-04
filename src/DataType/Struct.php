@@ -8,13 +8,42 @@ use stdClass;
 
 class Struct
 {
+	/**
+	 * Contains the object with key value pair
+	 * @var object
+	 */
 	protected $data;
+
+	/**
+	 * Contains the structure with key value pair
+	 * @var object
+	 */
 	protected $structure;
 
+	/**
+	 * Decides whether to send single type error or of complete object
+	 * @var boolean
+	 */
 	private $validateFull;
+
+	/**
+	 * Response data after validations
+	 * @var [type]
+	 */
 	private $response 	= [];
+
+	/**
+	 * Status of object validation
+	 * @var bool
+	 */
 	private $isValid 	= false;
 
+	/**
+	 * Initializing typestruct by validating and assigning values
+	 * @param stdClass     $data
+	 * @param stdClass     $structure
+	 * @param bool|boolean $validateFull
+	 */
 	function __construct(stdClass $data, stdClass $structure, bool $validateFull = true)
 	{
 		$this->validateFull = $validateFull;
@@ -34,6 +63,11 @@ class Struct
 		}
 	}
 
+	/**
+	 * Gets the value from object dictionary
+	 * @param  string $name
+	 * @return mixed
+	 */
 	function __get($name)
 	{
 		if(isset($this->data->{$name})) {
@@ -41,6 +75,11 @@ class Struct
 		}
 	}
 
+	/**
+	 * Validate the type of key and assign value
+	 * @param string $name
+	 * @param mixed $value
+	 */
 	function __set($name, $value)
 	{
 		if(isset($this->data->{$name})) {
@@ -50,22 +89,38 @@ class Struct
 		}
 	}
 
-	public function getData()
+	/**
+	 * Get complete object data
+	 * @return object
+	 */
+	public function getData(): object
 	{
 		return $this->data;
 	}
 
-	public function getStructure()
+	/**
+	 * Get complete structure data
+	 * @return object
+	 */
+	public function getStructure(): object
 	{
 		return $this->structure;
 	}
 
-	public function isValidateFull()
+	/**
+	 * Checks if validation type is full
+	 * @return boolean
+	 */
+	public function isValidateFull(): bool
 	{
 		return $this->validateFull;
 	}
 
-	public function getResponse()
+	/**
+	 * returns the response
+	 * @return boolean
+	 */
+	public function getResponse(): array
 	{
 		return $this->response;
 	}
