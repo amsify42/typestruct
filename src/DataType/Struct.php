@@ -91,18 +91,18 @@ class Struct
 
 	/**
 	 * Get complete object data
-	 * @return object
+	 * @return stdClass
 	 */
-	public function getData(): object
+	public function getData(): stdClass
 	{
 		return $this->data;
 	}
 
 	/**
 	 * Get complete structure data
-	 * @return object
+	 * @return stdClass
 	 */
-	public function getStructure(): object
+	public function getStructure(): stdClass
 	{
 		return $this->structure;
 	}

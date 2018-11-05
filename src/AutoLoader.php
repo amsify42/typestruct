@@ -8,13 +8,13 @@ class AutoLoader
 {	
 	/**
 	 * Instance of type TypeStruct
-	 * @var TypeStruct
+	 * @var Amsify42\TypeStruct\TypeStruct
 	 */
 	private $typeStruct;
 
 	/**
 	 * Base namespace of all typestruct files
-	 * @var [type]
+	 * @var string
 	 */
 	private $baseNameSpace;
 

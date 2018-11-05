@@ -6,10 +6,29 @@ use Amsify42\TypeStruct\Helper\DataType;
 
 final class TypeArray implements \Iterator, \ArrayAccess, \Countable 
 {
+    /**
+     * Position of array
+     * @var integer
+     */
 	private $position = 0;
+
+    /**
+     * Array data
+     * @var array
+     */
 	private $array;
+
+    /**
+     * Type of Array 
+     * @var string
+     */
     private $type;
 
+    /**
+     * Instantiate and validate array
+     * @param array  $array
+     * @param string $type
+     */
 	function __construct(array $array, string $type = 'mixed')
 	{
         if($type == 'mixed') {
@@ -32,7 +51,11 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
         $this->position = 0;
 	}
 
-    public function getType()
+    /**
+     * Get Type of array
+     * @return string
+     */
+    public function getType(): string
     {
         return $this->type;
     }

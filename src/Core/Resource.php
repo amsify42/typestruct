@@ -6,6 +6,10 @@ use stdClass;
 
 class Resource
 {
+	/**
+	 * Generated typestruct info 
+	 * @var array
+	 */
 	protected $gInfo = [];
 
 	public function __construct()
@@ -18,7 +22,7 @@ class Resource
 	 * @param  string $class [full name of class with namespace]
 	 * @return string        [file path of class based on psr4 autoloading]
 	 */
-	protected function getAutoloadPsr4Path(string $class): string
+	protected function getAutoloadPsr4Path(string $class): ?string
 	{
 		$classPath 	= NULL;
 		$appLevel 	= false;
@@ -60,9 +64,9 @@ class Resource
 	 * @param  array  	$namespaces
 	 * @param  string  	$class
 	 * @param  string  	$directory
-	 * @return boolean
+	 * @return string
 	 */
-	private function isClassPath(array $namespaces, string $class, string $directory): bool
+	private function isClassPath(array $namespaces, string $class, string $directory): ?string
 	{
 		$classPath = NULL;
 		foreach($namespaces as $namespace => $dir) {

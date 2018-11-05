@@ -7,7 +7,13 @@ use stdClass;
 
 class DataType
 {
-	public static function isValid($value, $type)
+	/**
+	 * Check if the type of value is valid
+	 * @param  mixed  $value
+	 * @param  string  $type
+	 * @return boolean
+	 */
+	public static function isValid($value, string $type): bool
 	{
 		$valid = false;
 		if($type == 'mixed') {
@@ -28,7 +34,12 @@ class DataType
 		return $valid;	
 	}
 
-	public static function getType($value)
+	/**
+	 * Get type of value given
+	 * @param  mixed $value
+	 * @return string
+	 */
+	public static function getType($value): string
 	{
 		if(is_string($value)) {
 			return 'string';
@@ -46,6 +57,11 @@ class DataType
 		return 'different';
 	}
 
+	/**
+	 * Get instance of value type
+	 * @param  mixed $value
+	 * @return mixed
+	 */
 	public static function getValue($value)
 	{
 		if(is_string($value)) {
@@ -62,6 +78,12 @@ class DataType
 		return $value;
 	}
 
+	/**
+	 * Get Instance of value
+	 * @param  mixed 		$value
+	 * @param  string|array $type
+	 * @return mixed
+	 */
 	public static function getInstance($value, $type)
 	{
 		if(is_array($type)) {
@@ -99,7 +121,14 @@ class DataType
 		}
 	}
 
-	public static function assign($name, $property, $value)
+	/**
+	 * assign value to property of typestruct object
+	 * @param  string 	$name
+	 * @param  mixed  	$property
+	 * @param  mixed 	$value
+	 * @return mixed
+	 */
+	public static function assign(string $name, $property, $value)
 	{
 		$type 		= 'mixed';
 		$isAssign 	= true;
@@ -154,6 +183,14 @@ class DataType
 		}
 	}
 
+	/**
+	 * Converting struct object child objects to type struct
+	 * @param  stdClass     $object
+	 * @param  stdClass     $structure
+	 * @param  bool|boolean $isChild
+	 * @param  bool|boolean $isValidateFull
+	 * @return mixed
+	 */
 	public static function childToStruct(stdClass $object, stdClass $structure, bool $isChild = false, bool $isValidateFull = false)
 	{
 		$stdObject 	= new stdClass;
@@ -168,8 +205,14 @@ class DataType
 		return ($isChild)? new DataTypes\Struct($stdObject, $structure, $isValidateFull) :$stdObject; 
 	}
 
-
-	public static function checkType($name, $value, $type)
+	/**
+	 * Check Type of value
+	 * @param  string 	$name
+	 * @param  mixed 	$value
+	 * @param  string 	$type
+	 * @return array
+	 */
+	public static function checkType(string $name, $value, string $type): array
 	{
 		$result = ['isValid' => true, 'message' => ''];
 		$type 	= trim($type);
@@ -225,12 +268,25 @@ class DataType
 		return $result;
 	}
 
-	public static function isResource($value, $type)
+	/**
+	 * Check if value is of type given resource
+	 * @param  mixed  $value
+	 * @param  mixed  $type
+	 * @return boolean
+	 */
+	public static function isResource($value, $type): bool
 	{
 		return ($value instanceof $type);
 	}
 
-	public static function checkArrayType($name, $value, $info)
+	/**
+	 * Check Array Type
+	 * @param  string 	$name
+	 * @param  mixed 	$value
+	 * @param  array 	$info
+	 * @return array
+	 */
+	public static function checkArrayType(string $name, $value, array $info): array
 	{
 		$result = ['isValid' => true, 'message' => '', 'value' => []];
 		if(isset($info['of']) && (is_array($value) || $value instanceof DataTypes\TypeArray)) {

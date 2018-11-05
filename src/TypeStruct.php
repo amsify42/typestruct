@@ -307,9 +307,9 @@ class TypeStruct extends Resource
 	/**
 	 * Check Resource Type full class name
 	 * @param  string $type
-	 * @return string
+	 * @return array
 	 */
-	private function checkResourceType(string $type): string
+	private function checkResourceType(string $type): array
 	{
 		$resource 	= $type;
 		$found 		= false;
