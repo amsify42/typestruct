@@ -54,7 +54,7 @@ $object->name = 'Prod42';
 $struct = new \App\TypeStructs\Simple($object);
 $response = $struct->getResponse();
 ```
-You will get type errors incase your object structure and its types does not match with **Simple** typestruct<br/>
+You will get type errors incase your object structure and its types does not match with **Simple** typestruct structure<br/><br/>
 If you set **setValidateFull()** while registering as true, you will receive errors in **getResponse()** else exeception will be thrown while validating itself
 
 <br/><br/>
@@ -64,7 +64,7 @@ Suppose your object is validated as true, now you want to change the property of
 $struct->id = '23'; // You'll receive an exception error as id is of type int and you tried to assign string
 ``` 
 
-You can create typestruct of multi-level object which resembles the javascript object
+You can create typestruct of multi-level object which resembles the javascript object or json structure
 
 ```php
 namespace Amsify42\TypeStructs;
