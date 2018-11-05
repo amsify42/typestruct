@@ -7,7 +7,7 @@
             "email": "amsify42@gmail.com"
         }
     ],
-    "type": "project",
+    "type": "library",
     "require": {
         "php": ">=7.0.0"
     },
