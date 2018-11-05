@@ -48,11 +48,11 @@ export typestruct Simple {
 ### Usage
 
 ```php
-$object 		= new \stdClass();
-$object->id 	= 42;
-$object->name 	= 'Prod42';
-$struct 		= new \App\TypeStructs\Simple($object);
-$response 		= $struct->getResponse();
+$object = new \stdClass();
+$object->id = 42;
+$object->name = 'Prod42';
+$struct = new \App\TypeStructs\Simple($object);
+$response = $struct->getResponse();
 ```
 You will get type errors incase your object structure and its types does not match with **Simple** typestruct<br/>
 If you set **setValidateFull()** while registering as true, you will receive errors in **getResponse()** else exeception will be thrown while validating itself
