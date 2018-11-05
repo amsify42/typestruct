@@ -38,3 +38,19 @@ if(!function_exists('tsdecode'))
 		return base64_decode(urldecode($string));
 	}
 }
+
+
+if(!function_exists('pathKey'))
+{
+	/**
+	 * Multi-level Path Key of object separated by token
+	 * @param  string $path
+	 * @param  string $name
+	 * @param  string $token
+	 * @return string
+	 */
+	function pathKey($path, $name, $token = '->')
+	{
+		return ($path)? ltrim($path, $token).$token.$name: $name;
+	}
+}

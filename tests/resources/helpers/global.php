@@ -27,9 +27,3 @@ function executionTime($start)
 	$execute = ($end - $start);
 	echo '<br/>Execution Time: '.$execute.' <br/>';
 }
-
-
-function pathKey($path, $name, $token = '->')
-{
-	return ($path)? ltrim($path, $token).$token.$name: $name;
-}
