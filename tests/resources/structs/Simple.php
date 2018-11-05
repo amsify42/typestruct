@@ -2,7 +2,7 @@
 
 namespace TestTS\resources\structs;
 
-typestruct Simple {
+export typestruct Simple {
 	id: int,
 	name: string,
 	price: float,

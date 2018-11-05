@@ -4,7 +4,7 @@ namespace TestTS\resources\structs;
 
 use TestTS\resources\app\User;
 
-typestruct Struct {
+export typestruct Struct {
 	name: string,
 	email: string,
 	id: int,

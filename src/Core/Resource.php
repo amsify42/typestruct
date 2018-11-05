@@ -27,9 +27,9 @@ class Resource
 		$classPath 	= NULL;
 		$appLevel 	= false;
 		$directory 	= TS_SRC_PATH.'/../';
-		if(is_file(TS_SRC_PATH.'/../../vendor')) {
+		if(is_dir(TS_SRC_PATH.'/../../../../vendor')) {
 			$appLevel 	= true;
-			$directory 	= TS_SRC_PATH.'/../../../';
+			$directory 	= TS_SRC_PATH.'/../../../../';
 		}
 		if(is_file($directory.'composer.json')) {
 			$composer 	= json_decode(file_get_contents($directory.'composer.json'), true);

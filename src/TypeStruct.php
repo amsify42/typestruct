@@ -135,9 +135,9 @@ class TypeStruct extends Resource
 	private function findClassName(): void
 	{
 		$fullName = '';
-		preg_match_all('/typestruct(.*?){/ims', $this->content, $matches);
+		preg_match('/export typestruct(.*?){/ims', $this->content, $matches);
 		if(isset($matches[1])) {
-			$this->info['name'] = trim($matches[1][0]);
+			$this->info['name'] = trim($matches[1]);
 		}
 	}
 
@@ -148,9 +148,9 @@ class TypeStruct extends Resource
 	private function findFullClassName(): void
 	{
 		$fullName = '';
-		preg_match_all('/namespace(.*?);/ims', $this->content, $matches);
+		preg_match('/namespace(.*?);/ims', $this->content, $matches);
 		if(isset($matches[1])) {
-			$this->info['namespace'] = trim($matches[1][0]);
+			$this->info['namespace'] = trim($matches[1]);
 			$fullName = $this->info['namespace']."\\".trim($this->info['name']);
 		} else {
 			$fullName = $this->info['name'];

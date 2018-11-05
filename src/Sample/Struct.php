@@ -4,7 +4,7 @@ namespace Amsify42\TypeStruct\Sample;
 
 use App\User;
 
-typestruct Struct {
+export typestruct Struct {
 	name: string,
 	email: string,
 	id: int,
