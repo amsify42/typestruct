@@ -1,10 +1,13 @@
 {
     "name": "amsify42/typestruct",
-    "description": "TypeStruct",
+    "description": "TypeStruct is a PHP library for defining strictly typed multi-level object structure",
+    "keywords": ["php", "typestruct", "validation", "amsify42"],
     "authors": [
         {
             "name": "Mohd Samiullah",
-            "email": "amsify42@gmail.com"
+            "email": "amsify42@gmail.com",
+            "homepage": "http://amsify42.com",
+            "role": "Developer"
         }
     ],
     "type": "library",

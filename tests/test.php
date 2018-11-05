@@ -16,12 +16,12 @@ if($execTime) $start = microtime(true);
 if($test == 'core') {
 
 	$typeValidator = new Amsify42\TypeStruct\TypeStruct();
+	$typeValidator->setValidateFull(true);
 	// Set Class
 	$typeValidator->setClass(\TestTS\resources\structs\Struct::class);
 	// Set actual path of struct
 	//$typeValidator->setPath(tresource('Struct.php'));
 	//$typeValidator->setToken('.');
-	$typeValidator->setValidateFull(true);
 	//dumP($typeValidator->getStructure());
 	//dumP($typeValidator->toJson());
 	$passedData 		= json_decode(file_get_contents(tresource('struct.json')));
@@ -97,7 +97,7 @@ if($test == 'core') {
 
 	$autoLoader = new Amsify42\TypeStruct\AutoLoader();
 	$autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
-	$autoLoader->setValidateFull(false);
+	$autoLoader->setValidateFull(true);
 	$autoLoader->setCustom(function($class){
 		$someInfo 	= explode('\\', $class);
 		return __DIR__."/resources/structs/".end($someInfo).".php";
@@ -107,7 +107,7 @@ if($test == 'core') {
 	$object 		= new \stdClass();
 	$object->id 	= 42;
 	$object->name 	= 'Prod42';
-	$object->price 	= 42.0;
+	$object->price 	= 42;
 	$object->mixed 	= '4354';
 	$struct 		= new \TestTS\resources\structs\Simple($object);
 	dumP($struct->getResponse());

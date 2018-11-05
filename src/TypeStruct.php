@@ -111,7 +111,7 @@ class TypeStruct extends Resource
 	 * Extract structure from typestruct file
 	 * @return TypeStruct
 	 */
-	private function extractStructure(): TypeStruct
+	private function extractStructure(): self
 	{
 		$pathInfo 				= pathinfo($this->info['path']);
 		$this->info['name'] 	= $pathInfo['filename'];

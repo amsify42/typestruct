@@ -28,7 +28,7 @@ class AutoLoader
 	 * Decides whether to send single type error or of complete object
 	 * @var boolean
 	 */
-	private $validateFull 	= true;
+	private $validateFull 	= false;
 
 	function __construct()
 	{
@@ -84,13 +84,13 @@ class AutoLoader
 			if($this->callback) {
 				$path = $this->callback->call($this, $class);
 				if($path) {
-					$this->typeStruct->setPath($path);
 					$this->typeStruct->setValidateFull($this->validateFull);
+					$this->typeStruct->setPath($path);
 					$actualPath = $this->typeStruct->getActualPath();
 				}
 			} else {
-				$this->typeStruct->setClass($class);
 				$this->typeStruct->setValidateFull($this->validateFull);
+				$this->typeStruct->setClass($class);
 				$actualPath = $this->typeStruct->getActualPath();
 			}
 			if(is_file($actualPath)) {

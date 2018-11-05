@@ -40,11 +40,11 @@ class Struct
 
 	/**
 	 * Initializing typestruct by validating and assigning values
-	 * @param stdClass     $data
-	 * @param stdClass     $structure
-	 * @param bool|boolean $validateFull
+	 * @param stdClass  $data
+	 * @param stdClass  $structure
+	 * @param boolean 	$validateFull
 	 */
-	function __construct(stdClass $data, stdClass $structure, bool $validateFull = true)
+	function __construct(stdClass $data, stdClass $structure, bool $validateFull = false)
 	{
 		$this->validateFull = $validateFull;
 		$struct 			= new Structure($structure);
@@ -55,11 +55,13 @@ class Struct
 			$this->structure 	= $structure;
 			$this->isValid 		= true;
 		} else {
-			// $message = "Structure must be of type '".get_called_class()."'\n";
-			// $message .= "\nErrors:\n";
-			// $message .= implode(", ", $response['messages']);
-			// throw new \RuntimeException($message);
-			$this->isValid 		= false;
+			if($this->validateFull) {
+				$this->isValid 	= false;
+			} else {
+				$message = "Structure must be of type '".get_called_class()."'\n";
+				$message .= "\nError: ".$this->response['message'];
+				throw new \RuntimeException($message);
+			}
 		}
 	}
 

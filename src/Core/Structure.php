@@ -17,7 +17,7 @@ class Structure
 	 * Decides whether to send single type error or of complete object
 	 * @var boolean
 	 */
-	private $validateFull 	= true;
+	private $validateFull 	= false;
 
 	/**
 	 * For locating key path with token between them

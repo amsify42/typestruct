@@ -185,10 +185,10 @@ class DataType
 
 	/**
 	 * Converting struct object child objects to type struct
-	 * @param  stdClass     $object
-	 * @param  stdClass     $structure
-	 * @param  bool|boolean $isChild
-	 * @param  bool|boolean $isValidateFull
+	 * @param  stdClass $object
+	 * @param  stdClass $structure
+	 * @param  boolean 	$isChild
+	 * @param  boolean 	$isValidateFull
 	 * @return mixed
 	 */
 	public static function childToStruct(stdClass $object, stdClass $structure, bool $isChild = false, bool $isValidateFull = false)
