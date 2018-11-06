@@ -6,7 +6,7 @@ PHP library for defining strictly typed multi-level object structure.
 ### Installation
 
 ```txt
-composer require "amsify42/typestruct":"dev-master"
+composer require amsify42/typestruct
 ```
 
 ## Table of Contents
