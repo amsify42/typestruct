@@ -151,10 +151,10 @@ You can call built-in global functions of PHP as a chain with the properties of 
 $struct->name->explode(',')->implode(',');
 ```
 **Note:** You can call only those built-in functions which either takes only one param or which takes last param as value of variable.
-<br/>
+<br/><br/>
 Examples:
 ```php
-	$value = 'typestruct';
-	addslashes($value); // It takes only one param, that is the value
-	explode(',', $value); // Even though it takes multiple params, it takes last param as value of variable
+$value = 'typestruct';
+addslashes($value); // It takes only one param, that is the value
+explode(',', $value); // Even though it takes multiple params, it takes last param as value of variable
 ```
