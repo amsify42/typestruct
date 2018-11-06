@@ -15,6 +15,7 @@ composer require "amsify42/typestruct":"dev-master"
 3. [Usage](#usage)
 4. [Multi Level Example](#multi-level-example)
 5. [Data Types](#data-types)
+6. [Built-in Functions](#built-in-functions)
 
 ### Registering Autoloader
 
@@ -130,6 +131,8 @@ All the above key value pairs will be validated based on their types.
 6. any
 7. YourClass
 
+**Note:** 7th type is a class type, it can be any class.
+
 #### For Array types
 1. array
 2. []
@@ -139,4 +142,19 @@ All the above key value pairs will be validated based on their types.
 6. boolean[]
 7. YourClass[]
 
-Both **array** and **[]** are same and represent the general or mixed array, 7th array is of type class resource.
+**Note:** Both **array** and **[]** are same and represent the general or mixed array, 7th array is of type class resource.
+
+
+### Built-in Functions
+You can call built-in global functions of PHP as a chain with the properties of typestruct object.
+```php
+$struct->name->explode(',')->implode(',');
+```
+**Note:** You can call only those built-in functions which either takes only one param or which takes last param as value of variable.
+<br/>
+Examples:
+```php
+	$value = 'typestruct';
+	addslashes($value); // It takes only one param, that is the value
+	explode(',', $value); // Even though it takes multiple params, it takes last param as value of variable
+```

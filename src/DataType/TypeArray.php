@@ -52,6 +52,20 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
 	}
 
     /**
+     * Call pre defined functions if exist
+     * @param  string   $name
+     * @param  array    $arguments
+     * @return mixed
+     */
+    function __call($name, $arguments)
+    {
+        if(function_exists($name)) {
+            $arguments[] = $this->array;
+            return DataType::getValue(call_user_func_array($name, $arguments));
+        }
+    }
+
+    /**
      * Get Type of array
      * @return string
      */
