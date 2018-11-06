@@ -9,7 +9,14 @@ PHP library for defining strictly typed multi-level object structure.
 composer require "amsify42/typestruct":"dev-master"
 ```
 
-### Registering Autoloader for TypeStruct
+## Table of Contents
+1. [Registering Autoloader](#registering-autoloader)
+2. [Typestruct file](#typestruct-file)
+3. [Usage](#usage)
+4. [Multi Level Example](#multi-level-example)
+5. [Data Types](#data-types)
+
+### Registering Autoloader
 
 ```php
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -33,7 +40,7 @@ $autoLoader->setCustom(function($class){
 $autoLoader->register();
 ```
 
-### Create typestruct file
+### Typestruct file
 
 After registering is done, you can create your typestruct file
 ```php
@@ -41,9 +48,11 @@ namespace App\TypeStructs;
 
 export typestruct Simple {
 	id: int,
-	name: string
+	name: string,
+	price: float
 }
 ```
+**Note:** This is not php syntax, this file content will be converted to php equivalent class while processing.
 
 ### Usage
 
@@ -51,6 +60,7 @@ export typestruct Simple {
 $object = new \stdClass();
 $object->id = 42;
 $object->name = 'Prod42';
+$object->price = 4.2;
 $struct = new \App\TypeStructs\Simple($object);
 $response = $struct->getResponse();
 ```
@@ -62,8 +72,17 @@ Suppose your object is validated as true, now you want to change the property of
 
 ```php
 $struct->id = '23'; // You'll receive an exception error as id is of type int and you tried to assign string
-``` 
+```
+Even though the properties of struct object is of types objects, you can print it as usual
+```php
+echo $struct->id;	
+```
+But if you are looking to perform operations on these properties, you need to call its value method
+```php
+echo $struct->price->value()/2;	
+```
 
+### Multi Level Example
 You can create typestruct of multi-level object which resembles the javascript object or json structure
 
 ```php
@@ -100,7 +119,9 @@ export typestruct Sample {
 ```
 All the above key value pairs will be validated based on their types.
 
-### Supported Data Types
+### Data Types
+
+#### Supported Data Types
 1. string
 2. int
 3. float
@@ -109,7 +130,7 @@ All the above key value pairs will be validated based on their types.
 6. any
 7. YourClass
 
-### For Array types
+#### For Array types
 1. array
 2. []
 3. string[]
