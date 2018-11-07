@@ -147,11 +147,12 @@ All the above key value pairs will be validated based on their types.
 #### Usage
 You can instantiate data types from data type classes, below are the examples:
 ```php
-	$string = Amsify42\Typestruct\DataType\TypeString('some_string');
-	$int 	= Amsify42\Typestruct\DataType\TypeInt(42);
-	$float 	= Amsify42\Typestruct\DataType\TypeFloat(4.2);
-	$array 	= Amsify42\Typestruct\DataType\TypeArray([4, 2]);
-	$bool 	= Amsify42\Typestruct\DataType\TypeBool(true);
+	$string = new Amsify42\Typestruct\DataType\TypeString('some_string');
+	$int 	= new Amsify42\Typestruct\DataType\TypeInt(42);
+	$float 	= new Amsify42\Typestruct\DataType\TypeFloat(4.2);
+	// For Array the default value of 2nd param is 'mixed', you can pass other data type listed above
+	$array 	= new Amsify42\Typestruct\DataType\TypeArray([4, 2], 'mixed');
+	$bool 	= new Amsify42\Typestruct\DataType\TypeBool(true);
 ```
 For dynamically getting instance of value you don't know which type it is
 ```php
