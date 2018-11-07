@@ -1,5 +1,5 @@
-[![Stable Version]()](https://packagist.org/packages/amsify42/typestruct) 
-[![Downloads]()](https://packagist.org/packages/amsify42/typestruct) 
+[![Stable Version](https://github.com/amsify42/typestruct/blob/master/LICENSE.txt)](https://packagist.org/packages/amsify42/typestruct) 
+[![Downloads](https://github.com/amsify42/typestruct/blob/master/LICENSE.txt)](https://packagist.org/packages/amsify42/typestruct) 
 [![License](https://github.com/amsify42/typestruct/blob/master/LICENSE.txt)](https://packagist.org/packages/amsify42/typestruct)
 
 ## TypeStruct
