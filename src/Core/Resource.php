@@ -99,13 +99,13 @@ class Resource
 	 */
 	private function generateDirectory(): void
 	{
-		$this->gInfo['name'] 	= tsencode($this->info['full_name']);
+		$this->gInfo['name'] 	= md5($this->info['full_name']);
 		$this->gInfo['dir'] 	= resource('generate/'.$this->gInfo['name']);
 		if(!file_exists($this->gInfo['dir'])) {
 		    mkdir($this->gInfo['dir'], 0777, true);
 		}
-		$this->gInfo['json'] 	= $this->gInfo['dir'].'/'.$this->gInfo['name'].'.json';
-		$this->gInfo['php'] 	= $this->gInfo['dir'].'/'.$this->gInfo['name'].'.php';
+		$this->gInfo['json'] 	= $this->gInfo['dir'].'/'.$this->info['name'].'.json';
+		$this->gInfo['php'] 	= $this->gInfo['dir'].'/'.$this->info['name'].'.php';
 	}
 
 	/**

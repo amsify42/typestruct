@@ -8,7 +8,7 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
 $execTime 	= true;
-$test 		= 'core'; // ('core', 'class', 'simple', 'autoload')
+$test 		= 'autoload'; // ('core', 'class', 'simple', 'autoload')
 
 
 if($execTime) $start = microtime(true);

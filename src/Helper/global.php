@@ -13,32 +13,6 @@ if(!function_exists('resource'))
 	}
 }
 
-if(!function_exists('tsencode'))
-{
-	/**
-	 * encodes the string
-	 * @param  string $string
-	 * @return string
-	 */
-	function tsencode($string)
-	{
-		return strtolower(urlencode(base64_encode($string)));
-	}
-}
-
-if(!function_exists('tsdecode'))
-{
-	/**
-	 * decodes the string
-	 * @param  string $string
-	 * @return string
-	 */
-	function tsdecode($string)
-	{
-		return base64_decode(urldecode($string));
-	}
-}
-
 
 if(!function_exists('pathKey'))
 {
