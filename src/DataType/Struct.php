@@ -10,13 +10,13 @@ class Struct
 {
 	/**
 	 * Contains the object with key value pair
-	 * @var object
+	 * @var stdClass
 	 */
 	protected $data;
 
 	/**
 	 * Contains the structure with key value pair
-	 * @var object
+	 * @var stdClass
 	 */
 	protected $structure;
 

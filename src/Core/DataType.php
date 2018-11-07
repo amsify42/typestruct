@@ -2,7 +2,7 @@
 
 namespace Amsify42\TypeStruct\Core;
 
-use Amsify42\TypeStruct\Helper\DataType as DtType;
+use Amsify42\TypeStruct\Helper\DataType as HelperDataType;
 
 class DataType
 {
@@ -25,7 +25,7 @@ class DataType
 		} else {
 			if(function_exists($name)) {
 				$arguments[] = $this->value;
-				return DtType::getValue(call_user_func_array($name, $arguments));
+				return HelperDataType::getValue(call_user_func_array($name, $arguments));
 			}
 		}
 	}

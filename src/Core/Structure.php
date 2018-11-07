@@ -9,7 +9,7 @@ class Structure
 {
 	/**
 	 * Structure of typestruct file as object
-	 * @var object
+	 * @var stdClass
 	 */
 	private $structure;
 

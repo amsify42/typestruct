@@ -45,7 +45,7 @@ class TypeStruct extends Resource
 
 	/**
 	 * Structure of typestruct file as object
-	 * @var object
+	 * @var stdClass
 	 */
 	protected $structure;
 
@@ -174,9 +174,9 @@ class TypeStruct extends Resource
 
 	/**
 	 * Get Structure of typestruct file
-	 * @return object
+	 * @return stdClass
 	 */
-	public function getStructure(): object
+	public function getStructure(): stdClass
 	{
 		return $this->structure;
 	}
@@ -193,9 +193,9 @@ class TypeStruct extends Resource
 	/**
 	 * Convert structure to object
 	 * @param  string $structString [description]
-	 * @return object
+	 * @return stdClass
 	 */
-	public function structToObject(string $structString): object
+	public function structToObject(string $structString): stdClass
 	{
 		$structure 	= new stdClass();
 		$pairs 		= $this->extractDictionary($structString);
