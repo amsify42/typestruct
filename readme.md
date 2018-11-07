@@ -16,6 +16,7 @@ composer require amsify42/typestruct
 4. [Multi Level Example](#multi-level-example)
 5. [Data Types](#data-types)
 6. [Built-in Functions](#built-in-functions)
+7. [Manual Validation](#manual-validation)
 
 ### Registering Autoloader
 
@@ -29,7 +30,7 @@ $autoLoader = new Amsify42\TypeStruct\AutoLoader();
 $autoLoader->setValidateFull(true);
 
 // Pass the base namespace of your typestruct files
-$autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
+$autoLoader->setBaseNamespace(\App\TypeStructs::class);
 
 // If your class files are not residing in psr4 directory structure, you can set callback for converting class name to locate the exact path of typestruct file while autoloading
 $autoLoader->setCustom(function($class){
@@ -37,7 +38,6 @@ $autoLoader->setCustom(function($class){
 	return 'your/path/to/class.php';
 });
 
-// Done
 $autoLoader->register();
 ```
 
@@ -144,11 +144,24 @@ All the above key value pairs will be validated based on their types.
 
 **Note:** Both **array** and **[]** are same and represent the general or mixed array, 7th array is of type class resource.
 
+#### Usage
+You can instantiate data types from data type classes, below are the examples:
+```php
+	$string = Amsify42\Typestruct\DataType\TypeString('some_string');
+	$int 	= Amsify42\Typestruct\DataType\TypeInt(42);
+	$float 	= Amsify42\Typestruct\DataType\TypeFloat(4.2);
+	$array 	= Amsify42\Typestruct\DataType\TypeArray([4, 2]);
+	$bool 	= Amsify42\Typestruct\DataType\TypeBool(true);
+```
+For dynamically getting instance of value you don't know which type it is
+```php
+	$value = Amsify42\TypeStruct\Helper\DataType::getValue($variable);
+```
 
 ### Built-in Functions
 You can call built-in global functions of PHP as a chain with the properties of typestruct object.
 ```php
-$struct->name->explode(',')->implode(',');
+$string->explode(',')->implode(',');
 ```
 **Note:** You can call only those built-in functions which either takes only one param or which takes last param as value of variable.
 <br/><br/>
@@ -157,4 +170,40 @@ Examples:
 $value = 'typestruct';
 addslashes($value); // It takes only one param, that is the value
 explode(',', $value); // Even though it takes multiple params, it takes last param as value of variable
+```
+
+### Manual Validation
+You can validate the data with typestruct structure without using autoloader
+
+#### TypeStruct File
+```php
+namespace App\TypeStructs;
+
+export typestruct Address {
+	door: string,
+	pincode: int,
+	city: string
+}	
+```
+#### Validation
+```php
+$validator = new Amsify42\TypeStruct\TypeStruct();
+
+// Use this if your typestruct file resides in psr4 directory structure
+$validator->setClass(\App\TypeStructs\Address::class);
+// [OR] use this to locate exact path
+$validator->setPath('path/to/Address.php');
+```
+You can pass both array or object of same structure which **Address** typestruct expects
+```php	
+$address ['door' => '10-11-1323', 'pincode' => 524278, 'city' => 'MyCity'];
+// [OR]
+$address = new \stdClass;
+$address->door = '10-11-1323';
+$address->pincode = 524278;
+$address->city = 'MyCity';
+```
+You can get the struct object here in both case, whether validated or not.
+```php
+$struct = $validator->getTypeStruct($address);
 ```
