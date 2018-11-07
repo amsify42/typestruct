@@ -1,5 +1,5 @@
-[![Stable Version](https://poser.pugx.org/amsify42/typestruct/v/stable)](https://packagist.org/packages/amsify42/typestruct) 
-[![Downloads](https://poser.pugx.org/amsify42/typestruct/downloads)](https://packagist.org/packages/amsify42/typestruct) 
+[![Latest Stable Version](https://poser.pugx.org/amsify42/typestruct/v/stable)](https://packagist.org/packages/amsify42/typestruct) 
+[![Total Downloads](https://poser.pugx.org/amsify42/typestruct/downloads)](https://packagist.org/packages/amsify42/typestruct) 
 [![License](https://poser.pugx.org/amsify42/typestruct/license)](https://github.com/amsify42/typestruct/blob/master/readme.md)
 
 ## TypeStruct
