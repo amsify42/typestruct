@@ -24,7 +24,11 @@ class DataType
 			return $this->value;
 		} else {
 			if(function_exists($name)) {
-				$arguments[] = $this->value;
+				if(count($arguments)> 0 && in_array($name, TS_G_FUNCTIONS)) {
+					array_unshift($arguments, $this->value);
+				} else {
+					$arguments[] = $this->value;
+				}
 				return HelperDataType::getValue(call_user_func_array($name, $arguments));
 			}
 		}

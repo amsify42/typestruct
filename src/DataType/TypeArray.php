@@ -31,22 +31,7 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
      */
 	function __construct(array $array, string $type = 'mixed')
 	{
-        if($type == 'mixed') {
-            $newArray = [];
-            foreach($array as $nak => $value) {
-                $newArray[$nak] = DataType::getValue($value);
-            }
-        } else {
-            $newArray = [];
-            foreach($array as $nak => $value) {
-                if(DataType::isValid($value, $type)) {
-                    $newArray[$nak] = DataType::getValue($value);
-                } else {
-                    throw new \RuntimeException("Array of type must be:".$type);
-                }
-            }
-        }
-        $this->array    = $newArray;
+        $this->array    = $this->validate($array, $type);
         $this->type     = $type;
         $this->position = 0;
 	}
@@ -60,9 +45,40 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
     function __call($name, $arguments)
     {
         if(function_exists($name)) {
-            $arguments[] = $this->array;
-            return DataType::getValue(call_user_func_array($name, $arguments));
+            if(count($arguments)> 0 && in_array($name, TS_G_FUNCTIONS)) {
+                array_unshift($arguments, $this->array);
+            } else {
+                $arguments[] = $this->array;
+            }
+            $value = call_user_func_array($name, $arguments);
+            if($value && !is_array($value)) {
+                return DataType::getValue($value);    
+            } else {
+                if($value) {
+                    $this->array = $this->validate($value, $this->type);
+                }
+                return $this;
+            }
         }
+    }
+
+    private function validate(array $array, string $type): array
+    {
+        $newArray = [];
+        if($type == 'mixed') {
+            foreach($array as $nak => $value) {
+                $newArray[$nak] = DataType::getValue($value);
+            }
+        } else {
+            foreach($array as $nak => $value) {
+                if(DataType::isValid($value, $type)) {
+                    $newArray[$nak] = DataType::getValue($value);
+                } else {
+                    throw new \RuntimeException("Array of type must be:".$type);
+                }
+            }
+        }
+        return $newArray;
     }
 
     /**

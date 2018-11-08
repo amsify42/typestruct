@@ -8,7 +8,7 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
 $execTime 	= true;
-$test 		= 'autoload'; // ('core', 'class', 'simple', 'autoload')
+$test 		= 'core'; // ('core', 'class', 'simple', 'autoload')
 
 
 if($execTime) $start = microtime(true);
@@ -35,7 +35,10 @@ if($test == 'core') {
 	//dumP($struct); die;
 
 	echo $struct->name.'<br/>';
-	$array = $struct->name->explode(',');
+	// $array = $struct->name->explode(',')->usort(function($value, $index){
+
+	// });
+	$array = $struct->name->explode('i');
 	dumP($array);
 	
 	// echo $struct->name.'<br/>';
