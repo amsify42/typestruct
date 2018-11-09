@@ -23,7 +23,8 @@ class DataType
 		if($name == 'val' || $name == 'value') {
 			return $this->value;
 		} else {
-			if(function_exists($name)) {
+			$name = decideFunction($name);
+			if($name) {
 				if(count($arguments)> 0 && in_array($name, TS_G_FUNCTIONS)) {
 					array_unshift($arguments, $this->value);
 				} else {

@@ -38,11 +38,12 @@ if($test == 'core') {
 	// $array = $struct->name->explode(',')->usort(function($value, $index){
 
 	// });
-	$array = $struct->name->explode('i');
+	$array = $struct->name->explode('i')->reverse();
 	dumP($array);
 	
 	// echo $struct->name.'<br/>';
-	// $struct->id = 3;
+	$price = $struct->price->ceil()->floor();
+	dumP($price);
 	// echo ($struct->id->value()/2).'<br/>';
 	// echo $struct->someEl->someChild->key4.'<br/>';
 	// echo count($struct->items).'<br/>';

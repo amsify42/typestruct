@@ -44,21 +44,14 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
      */
     function __call($name, $arguments)
     {
-        if(function_exists($name)) {
+        $name = decideFunction($name, 'array_');
+        if($name) {
             if(count($arguments)> 0 && in_array($name, TS_G_FUNCTIONS)) {
                 array_unshift($arguments, $this->array);
             } else {
                 $arguments[] = $this->array;
             }
-            $value = call_user_func_array($name, $arguments);
-            if($value && !is_array($value)) {
-                return DataType::getValue($value);    
-            } else {
-                if($value) {
-                    $this->array = $this->validate($value, $this->type);
-                }
-                return $this;
-            }
+            return DataType::getValue($name(...$arguments));
         }
     }
 

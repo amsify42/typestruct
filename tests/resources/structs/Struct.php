@@ -8,6 +8,7 @@ export typestruct Struct {
 	name: string,
 	email: string,
 	id: int,
+	price: float,
 	address: {
 		door: string,
 		zip: int

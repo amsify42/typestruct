@@ -29,7 +29,49 @@ if(!function_exists('pathKey'))
 	}
 }
 
+if(!function_exists('decideFunction'))
+{
+	/**
+	 * Find function exist
+	 * @param  string $name
+	 * @param  string $prefix
+	 * @return string
+	 */
+	function decideFunction($name, $prefix = '')
+	{
+		if(function_exists($name)) {
+			return $name;
+		} else {
+			$_name = nameToUnderscore($name);
+			if(function_exists($_name)) {
+				return $_name;
+			} else if($prefix) {
+				$_name = nameToUnderscore($prefix.$name);
+				if(function_exists($_name)) {
+					return $_name;
+				}
+			}
+		}
+		return NULL;
+	}
+}
 
+if(!function_exists('nameToUnderscore'))
+{
+	/**
+	 * CamelCase To Underscore
+	 * @param  string $name
+	 * @return string
+	 */
+	function nameToUnderscore($name)
+	{
+		return strtolower(preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $name));
+	}
+}
+
+/**
+ * Functions which takes value as the last param
+ */
 if(!defined('TS_G_FUNCTIONS')) {
 	define('TS_G_FUNCTIONS', [
 		// string

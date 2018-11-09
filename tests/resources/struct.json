@@ -2,6 +2,7 @@
     "name": "string",
     "email": "string",
     "id": 1,
+    "price": 4.2,
     "address": {
         "door": "string",
         "zip": 500028
