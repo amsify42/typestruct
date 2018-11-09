@@ -168,13 +168,13 @@ You can call built-in global functions of PHP as a chain with the properties of 
 ```php
 $string->explode(',')->implode(',');
 ```
-You can call methods as camel case also
+You can use camelCase also to call built-in methods
 ```php
 $string->explode(',')->arrayReverse(); // array_reverse as arrayReverse
 ```
-For array methods you can even skip text **array**
+For built-in array methods you can even skip **array_** prefix
 ```php
-$string->explode(',')->reverse();
+$string->explode(',')->reverse(); // array_reverse as reverse
 ```
 <br/>
 
