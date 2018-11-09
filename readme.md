@@ -164,18 +164,19 @@ For dynamically getting instance of value you don't know which type it is
 ```
 
 ### Built-in Functions
-You can call built-in global functions of PHP as a chain with the properties of typestruct object.
+You can call built-in global functions of PHP as a chain with the properties of typestruct object properties or with variable of datatype.
 ```php
 $string->explode(',')->implode(',');
 ```
-**Note:** You can call only those built-in functions which either takes only one param or which takes last param as value of variable.
-<br/><br/>
-Examples:
+You can call methods as camel case also
 ```php
-$value = 'typestruct';
-addslashes($value); // It takes only one param, that is the value
-explode(',', $value); // Even though it takes multiple params, it takes last param as value of variable
+$string->explode(',')->arrayReverse(); // array_reverse as arrayReverse
 ```
+For array methods you can even skip text **array**
+```php
+$string->explode(',')->reverse();
+```
+<br/>
 
 ### Manual Validation
 You can validate the data with typestruct structure without using autoloader
