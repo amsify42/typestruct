@@ -104,7 +104,7 @@ class Resource
 		if(!file_exists($this->gInfo['dir'])) {
 		    mkdir($this->gInfo['dir'], 0777, true);
 		}
-		$this->gInfo['json'] 	= $this->gInfo['dir'].'/'.$this->info['name'].'.json';
+		$this->gInfo['json'] 	= $this->gInfo['dir'].'/info.json';
 		$this->gInfo['php'] 	= $this->gInfo['dir'].'/'.$this->info['name'].'.php';
 	}
 
