@@ -127,9 +127,9 @@ export typestruct Sample {
 ```
 All the above key value pairs will be validated based on their types.
 ```php
-$struct = new \App\TypeStructs\Sample($data); // Pass data of stdClass or array which matches the Sample structure
+$struct = new \App\TypeStructs\Sample($data); // Pass data of stdClass or array which agrees to Sample structure
 ```
-**Important Note:** The response you get in **$struct** will be of type object. Only those keys which represent array in typestruct file can be used as array.
+**Important Note:** The response you get in **$struct** variable will be of type object. Only those keys which represent array in typestruct file can be used as array.
 
 ### Data Types
 
