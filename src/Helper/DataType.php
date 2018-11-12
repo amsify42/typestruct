@@ -65,15 +65,35 @@ class DataType
 	public static function getValue($value)
 	{
 		if(is_string($value)) {
-			return new DataTypes\TypeString($value);
+			if($value instanceof DataTypes\TypeString) {
+				return $value;
+			} else {
+				return new DataTypes\TypeString($value);
+			}
 		} else if(is_int($value)) {
-			return new DataTypes\TypeInt($value);
+			if($value instanceof DataTypes\TypeInt) {
+				return $value;
+			} else {
+				return new DataTypes\TypeInt($value);
+			}
 		} else if(is_float($value)) {
-			return new DataTypes\TypeFloat($value);
+			if($value instanceof DataTypes\TypeFloat) {
+				return $value;
+			} else {
+				return new DataTypes\TypeFloat($value);
+			}
 		} else if(is_array($value)) {
-			return new DataTypes\TypeArray($value);
+			if($value instanceof DataTypes\TypeArray) {
+				return $value;
+			} else {
+				return new DataTypes\TypeArray($value);
+			}
 		} else if(is_bool($value)) {
-			return new DataTypes\TypeBool($value);
+			if($value instanceof DataTypes\TypeBool) {
+				return $value;
+			} else {
+				return new DataTypes\TypeBool($value);
+			}
 		}
 		return $value;
 	}

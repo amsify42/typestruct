@@ -118,10 +118,14 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
 
     public function offsetSet($offset, $value)
     {
-        if(is_null($offset)) {
-            $this->array[] = $value;
+        if(DataType::isValid($value, $this->type)) {
+            if(is_null($offset)) {
+                $this->array[] = DataType::getValue($value);
+            } else {
+                $this->array[$offset] = DataType::getValue($value);
+            }
         } else {
-            $this->array[$offset] = $value;
+            throw new \RuntimeException("Array Type Error: Trying to assign '".DataType::getType($value)."' expected '".$this->type."'");
         }
     }
 
