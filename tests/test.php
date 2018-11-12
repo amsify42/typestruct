@@ -119,9 +119,9 @@ if($test == 'core') {
 	$object->name 	= 'Prod42';
 	$object->price 	= 42.0;
 	$object->mixed 	= '4354';
-	$struct 		= new \TestTS\resources\structs\Simple($object);
+	$struct 		= new \TestTS\resources\structs\Simple((array)$object);
 	dumP($struct->getResponse());
-	//dumP($struct);
+	dumP($struct);
 	
 }
 

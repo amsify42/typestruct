@@ -7,7 +7,7 @@ if(!function_exists('resource'))
 	 * @param  string $path
 	 * @return string
 	 */
-	function resource($path)
+	function resource(string $path): string
 	{
 		return __DIR__.'/../resources/'.$path;
 	}
@@ -23,7 +23,7 @@ if(!function_exists('pathKey'))
 	 * @param  string $token
 	 * @return string
 	 */
-	function pathKey($path, $name, $token = '->')
+	function pathKey(string $path, string $name, string $token = '->'): string
 	{
 		return ($path)? ltrim($path, $token).$token.$name: $name;
 	}
@@ -37,7 +37,7 @@ if(!function_exists('decideFunction'))
 	 * @param  string $prefix
 	 * @return string
 	 */
-	function decideFunction($name, $prefix = '')
+	function decideFunction(string $name, string $prefix = ''): string
 	{
 		if(function_exists($name)) {
 			return $name;
@@ -63,9 +63,35 @@ if(!function_exists('nameToUnderscore'))
 	 * @param  string $name
 	 * @return string
 	 */
-	function nameToUnderscore($name)
+	function nameToUnderscore(string $name): string
 	{
 		return strtolower(preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $name));
+	}
+}
+
+if(!function_exists('arrayToObject'))
+{
+	/**
+	 * array to object
+	 * @param  array $array
+	 * @param  array $struct
+	 * @return stdClass
+	 */
+	function arrayToObject(array $array, stdClass $struct): stdClass
+	{
+	  $obj = new stdClass;
+	  foreach($array as $k => $v) {
+	     if(strlen($k)) {
+	     	if(isset($struct->{$k})) {
+		        if(is_array($v) && !is_array($struct->{$k})) {
+		           $obj->{$k} = arrayToObject($v, $struct->{$k});
+		        } else {
+		           $obj->{$k} = $v;
+		        }
+	        }
+	     }
+	  }
+	  return $obj;
 	}
 }
 

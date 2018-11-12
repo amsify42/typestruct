@@ -136,8 +136,8 @@ class Resource
 		$content 	= "<?php";
 		if(isset($this->info['namespace']) && $this->info['namespace']) {
 			$content .= " 
-namespace {$this->info['namespace']};
-use stdClass;";
+
+namespace {$this->info['namespace']};";
 		}
 		$content .= "
 
@@ -145,7 +145,7 @@ class {$this->info['name']} extends \Amsify42\TypeStruct\DataType\Struct
 {
 	private \$struct = '".base64_encode(serialize($this->structure))."';
 
-	function __construct(stdClass \$data)
+	function __construct(\$data)
 	{
 		if(is_string(\$this->struct)) {
 			\$this->struct = unserialize(base64_decode(\$this->struct));

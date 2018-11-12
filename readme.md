@@ -62,15 +62,18 @@ export typestruct Simple {
 ### Usage
 
 ```php
-$object = new \stdClass();
-$object->id = 42;
-$object->name = 'Prod42';
-$object->price = 4.2;
-$struct = new \App\TypeStructs\Simple($object);
+$data = new \stdClass();
+$data->id = 42;
+$data->name = 'Prod42';
+$data->price = 4.2;
+// [OR]
+$data ['id' => 42, 'name' => 'Prod42', 'price' => 4.2];
+
+$struct = new \App\TypeStructs\Simple($data);
 $response = $struct->getResponse();
 ```
-You will get type errors incase your object structure and its types does not match with **Simple** typestruct structure<br/><br/>
-If you set **setValidateFull()** while registering as true, you will receive errors in **getResponse()** else exeception will be thrown while validating itself
+You will get type errors incase your object structure and its types does not match with **Simple** structure<br/><br/>
+If you set **setValidateFull()** while registering as true, you will receive errors in **getResponse()** else run time exception will be thrown while validating itself
 
 <br/><br/>
 Suppose your object is validated as true, now you want to change the property of the typestruct object
@@ -123,6 +126,10 @@ export typestruct Sample {
 }
 ```
 All the above key value pairs will be validated based on their types.
+```php
+$struct = new \App\TypeStructs\Sample($data); // Pass data of stdClass or array which matches the Sample structure
+```
+**Important Note:** The response you get in **$struct** will be of type object. Only those keys which represent array in typestruct file can be used as array.
 
 ### Data Types
 
@@ -209,7 +216,7 @@ $address->door = '10-11-1323';
 $address->pincode = 524278;
 $address->city = 'MyCity';
 ```
-You can get the struct object here in both case, whether validated or not.
+You can get the struct object here in both case, whether validated or not with detail error information(if not validated).
 ```php
 $struct = $validator->getTypeStruct($address);
 ```

@@ -40,12 +40,16 @@ class Struct
 
 	/**
 	 * Initializing typestruct by validating and assigning values
-	 * @param stdClass  $data
-	 * @param stdClass  $structure
-	 * @param boolean 	$validateFull
+	 * @param stdClass|array  	$data
+	 * @param stdClass  		$structure
+	 * @param boolean 			$validateFull
 	 */
-	function __construct(stdClass $data, stdClass $structure, bool $validateFull = false)
+	function __construct($data, stdClass $structure, bool $validateFull = false)
 	{
+		if(!is_array($data) && !$data instanceof stdClass) {
+			throw new \RuntimeException('TypeStruct Error: Data must be of type stdClass or array');
+		}
+		$data 				= is_array($data)? arrayToObject($data, $structure): $data;
 		$this->validateFull = $validateFull;
 		$struct 			= new Structure($structure);
 		$struct->setValidateFull($this->validateFull);

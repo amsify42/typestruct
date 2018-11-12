@@ -235,9 +235,7 @@ class TypeStruct extends Resource
 	 */
 	public function getTypeStruct($data)
 	{
-		if(!is_array($data) && !is_object($data)) 
-			throw new \RuntimeException('TypeStruct Error: Parameter must be of type object or array');
-		$this->info['data'] = (object)$data;
+		$this->info['data'] = $data;
 		require_once $this->gInfo['php'];
 		$class 		= "\\".$this->info['full_name'];
 		$struct 	= new $class($this->info['data'], $this->structure, $this->validateFull);
