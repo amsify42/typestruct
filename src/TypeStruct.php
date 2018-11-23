@@ -173,6 +173,26 @@ class TypeStruct extends Resource
 	}
 
 	/**
+	 * Find Length Info of type
+	 * @param  string $content
+	 * @param  string $type
+	 * @return array
+	 */
+	private function findLengthInfo(string $content, string $type = ''): array
+	{
+		$matches = [];
+		if($type == 'array') {
+			preg_match('/\[(.*?)\]/ims', $content, $matches);
+		} else {
+			preg_match('/\((.*?)\)/ims', $content, $matches);
+		}
+		if(isset($matches[1])) {
+			return explode('.', $matches[1]);
+		}
+		return [];
+	}
+
+	/**
 	 * Get Structure of typestruct file
 	 * @return stdClass
 	 */
@@ -249,8 +269,8 @@ class TypeStruct extends Resource
 	 */
 	private function findArrayType(string $type): string
 	{
-		$infoArr = array_filter(explode('[]', $type));
-		return (sizeof($infoArr)> 0 && trim($infoArr[0]))? $infoArr[0]: '[]';
+		$infoArr = explode('[', $type);
+		return (sizeof($infoArr)> 0 && trim($infoArr[0]))? $infoArr[0]: '';
 	}
 
 	/**
@@ -260,7 +280,17 @@ class TypeStruct extends Resource
 	 */
 	private function isTypeArray(string $type): bool
 	{
-		return (preg_match("/(array|\[\])/i", $type));
+		return (trim($type) == 'array' || preg_match("/\[(\d+(,\d+)*)?\]$/i", $type));
+	}
+
+	/**
+	 * Check if type is valid
+	 * @param  string  $type
+	 * @return boolean
+	 */
+	private function isType(string $type): bool
+	{
+		return (preg_match("/\[(\d+(,\d+)*)?\]$/i", $type));
 	}
 
 	/**
@@ -271,32 +301,43 @@ class TypeStruct extends Resource
 	private function isValidType(string $type): array
 	{
 		$type 	= trim($type);
-		$result = ['isValid' => false, 'type' => ''];
+		$result = ['isValid' => false, 'type' => []];
+		$vType 	= '';
 		if($this->isTypeArray($type)) {
-			$arrayType = trim($this->findArrayType($type));
-			if(in_array($arrayType, $this->arrayTypes)) {
+			$vType 		= 'array'; 
+			$arrayType 	= trim($this->findArrayType($type));
+			if(!$arrayType || in_array($arrayType, $this->arrayTypes)) {
 				$result['isValid'] 	= true;
 				$result['type'] 	= ['type' => 'array'];
-				if($arrayType != '[]' && $arrayType != 'array') {
+				if($arrayType && $arrayType != '[]' && $arrayType != 'array') {
 					$result['type']['of'] = $arrayType;
 				}
 			} else {
-				$info = $this->checkResourceType(str_replace('[]', '', $type));
+				$info = $this->checkResourceType($arrayType);
 				if($info['isValid']) {
 					$result['isValid'] 	= true;
 					$result['type'] 	= ['type' => 'array', 'of' => $info['type']];
 				}
 			}
 		} else {
-			if(in_array($type, $this->reservedTypes)) {
+			$typeArr 	= explode('(', $type);
+			$gType 		= isset($typeArr[0])? trim($typeArr[0]): '';
+			if(in_array($gType, $this->reservedTypes)) {
 				$result['isValid'] 	= true;
-				$result['type'] 	= $type;
+				$result['type'] 	= ['type' => $gType];
 			} else {
-				$info = $this->checkResourceType($type);
+				$info = $this->checkResourceType($gType);
 				if($info['isValid']) {
 					$result['isValid'] 	= true;
-					$result['type'] 	= $info['type'];
+					$result['type'] 	= ['type' => $info['type']];
 				}
+			}
+		}
+		$lenInfo = $this->findLengthInfo($type, $vType);
+		if(!empty($lenInfo)) {
+			$result['type']['length'] = (int)$lenInfo[0];
+			if(isset($lenInfo[1])) {
+				$result['type']['decimal'] = (int)$lenInfo[1];
 			}
 		}
 		return $result;
@@ -310,17 +351,18 @@ class TypeStruct extends Resource
 	private function checkResourceType(string $type): array
 	{
 		$resource 	= $type;
-		$found 		= false;
-		$info 		= ['isValid' => true, 'type' => $type];
+		$info 		= ['isValid' => false, 'type' => $type];
 		if(sizeof($this->info['used_classes'])> 0) {
 			foreach($this->info['used_classes'] as $class) {
 				if(strpos($class, $type) !== false) {
-					$found 		= true;
 					$resource 	= $class; break;
 				}
 			}
 		}
 		$info['type'] = $resource;
+		if(class_exists($resource)) {
+			$info['isValid'] = true; 
+		}
 		return $info;
 	}
 

@@ -89,8 +89,8 @@ class Structure
 						$result['path']    .= $name.$this->token.$validated['path'];
 						if(!$this->validateFull) break;
 					}
-				} else if(is_array($type)) {
-					$typeResult = Helper\DataType::checkArrayType($name, $data->{$name}, $type);
+				} else if($type == 'array') {
+					$typeResult = Helper\DataType::checkArrayType($name, $data->{$name}, ['type' => $type]);
 					if(!$typeResult['isValid']) {
 						$result['isValid'] 	= false;
 						$result['message'] 	= $typeResult['message'];
@@ -102,10 +102,10 @@ class Structure
 						}
 					} else {
 						$data->{$name} = (!empty($typeResult['value']))? $typeResult['value']: $data->{$name};
-						$data->{$name} = Helper\DataType::getInstance($data->{$name}, $type);
+						$data->{$name} = Helper\DataType::getInstance($data->{$name}, ['type' => $type]);
 					}
 				} else {
-					$typeResult = Helper\DataType::checkType($name, $data->{$name}, $type);
+					$typeResult = Helper\DataType::checkType($name, $data->{$name}, ['type' => $type]);
 					if(!$typeResult['isValid']) {
 						$result['isValid'] 	= false;
 						$result['message'] 	= $typeResult['message'];
@@ -116,7 +116,7 @@ class Structure
 							break;
 						}
 					 } else {
-						$data->{$name} = Helper\DataType::getInstance($data->{$name}, $type);
+						$data->{$name} = Helper\DataType::getInstance($data->{$name}, ['type' => $type]);
 					 }
 				}
 			}			

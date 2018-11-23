@@ -11,6 +11,18 @@ class DataType
 	 * @var mixed
 	 */
 	protected $value;
+
+	/**
+     * Length of variable 
+     * @var int
+     */
+    protected $length = 0;
+
+    /**
+     * Length of decimal 
+     * @var int
+     */
+    protected $decimal = 0;
 	
 	/**
 	 * Get actual value of data when val|value is called or call pre defined functions
@@ -42,5 +54,23 @@ class DataType
 	public function getType(): string
 	{
 		return gettype($this->value);
+	}
+
+	/**
+	 * Get length of value
+	 * @return int
+	 */
+	public function getLength(): int
+	{
+		return $this->length;
+	}
+
+	/**
+	 * Get decimal of value
+	 * @return int
+	 */
+	public function getDecimal(): int
+	{
+		return $this->decimal;
 	}
 }

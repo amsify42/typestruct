@@ -106,31 +106,31 @@ class DataType
 	 */
 	public static function getInstance($value, $type)
 	{
-		if(is_array($type)) {
+		if($type['type'] == 'array') {
 			if($value instanceof DataTypes\TypeArray) {
 				return $value;
 			} else {
 				return new DataTypes\TypeArray($value, isset($type['of'])? $type['of']: 'mixed');
 			}
-		} else if($type == 'string') {
+		} else if($type['type'] == 'string') {
 			if($value instanceof DataTypes\TypeString) {
 				return $value;
 			} else {
-				return new DataTypes\TypeString($value);
+				return new DataTypes\TypeString($value, isset($type['length'])? $type['length']: 0);
 			}
-		} else if($type == 'int') {
+		} else if($type['type'] == 'int') {
 			if($value instanceof DataTypes\TypeInt) {
 				return $value;
 			} else {
-				return new DataTypes\TypeInt($value);
+				return new DataTypes\TypeInt($value, isset($type['length'])? $type['length']: 0);
 			}
-		} else if($type == 'float') {
+		} else if($type['type'] == 'float') {
 			if($value instanceof DataTypes\TypeFloat) {
 				return $value;
 			} else {
-				return new DataTypes\TypeFloat($value);
+				return new DataTypes\TypeFloat($value, isset($type['length'])? $type['length']: 0, isset($type['decimal'])? $type['decimal']: 0);
 			}
-		} else if($type == 'bool') {
+		} else if($type['type'] == 'bool') {
 			if($value instanceof DataTypes\TypeBool) {
 				return $value;
 			} else {
@@ -154,21 +154,21 @@ class DataType
 		$isAssign 	= true;
 		if($property instanceof DataTypes\TypeString) {
 			if(is_string($value)) {
-				return new DataTypes\TypeString($value);
+				return new DataTypes\TypeString($value, $property->getLength());
 			} else {
 				$type 		= 'string';
 				$isAssign 	= false;
 			}
 		} else if($property instanceof DataTypes\TypeInt) {
 			if(is_int($value)) {
-				return new DataTypes\TypeInt($value);
+				return new DataTypes\TypeInt($value, $property->getLength());
 			} else {
 				$type 		= 'integer';
 				$isAssign 	= false;
 			}
 		} else if($property instanceof DataTypes\TypeFloat) {
 			if(is_float($value)) {
-				return new DataTypes\TypeFloat($value);
+				return new DataTypes\TypeFloat($value, $property->getLength(), $property->getDecimal());
 			} else {
 				$type 		= 'float';
 				$isAssign 	= false;
@@ -229,14 +229,14 @@ class DataType
 	 * Check Type of value
 	 * @param  string 	$name
 	 * @param  mixed 	$value
-	 * @param  string 	$type
+	 * @param  array 	$type
 	 * @return array
 	 */
-	public static function checkType(string $name, $value, string $type): array
+	public static function checkType(string $name, $value, array $type): array
 	{
 		$result = ['isValid' => true, 'message' => ''];
-		$type 	= trim($type);
-		switch($type) {
+		$vType 	= $type['type']['type'];
+		switch($vType) {
 			case 'string':
 				if(!is_string($value) && !$value instanceof DataTypes\TypeString) {
 					$result['isValid'] 	= false;
@@ -275,13 +275,13 @@ class DataType
 				break;	
 
 			default:
-				if(strpos($type, '\\') !== false || preg_match("/^[A-Z]/", $type)) {
-					if(!self::isResource($value, $type)) {
+				if(strpos($vType, '\\') !== false || preg_match("/^[A-Z]/", $vType)) {
+					if(!self::isResource($value, $vType)) {
 						$result['isValid'] 	= false;
-						$result['message'] 	= $name.' must be of type class: '.$type;
+						$result['message'] 	= $name.' must be of type class: '.$vType;
 					}
 				} else {
-					throw new \RuntimeException("Invalid data type: ".$type);
+					throw new \RuntimeException("Invalid data type: ".$vType);
 				}
 				break;
 		}
@@ -317,7 +317,7 @@ class DataType
 						$result['message'] 	= $name.' must be an array of string';
 						break;
 					} else {
-						$result['value'][$vk] = self::getInstance($el, 'string');
+						$result['value'][$vk] = self::getInstance($el, ['type' => 'string']);
 					}
 				}
 			} else if($info['of'] == 'int') {
@@ -327,7 +327,7 @@ class DataType
 						$result['message'] 	= $name.' must be an array of int';
 						break;
 					} else {
-						$result['value'][$vk] = self::getInstance($el, 'int');
+						$result['value'][$vk] = self::getInstance($el, ['type' => 'int']);
 					}
 				}
 			} else if($info['of'] == 'float') {
@@ -337,7 +337,7 @@ class DataType
 						$result['message'] 	= $name.' must be an array of float';
 						break;
 					} else {
-						$result['value'][$vk] = self::getInstance($el, 'float');
+						$result['value'][$vk] = self::getInstance($el, ['type' => 'float']);
 					}
 				}
 			} else if($info['of'] == 'boolean') {

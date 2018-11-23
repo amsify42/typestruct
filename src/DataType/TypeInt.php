@@ -10,9 +10,10 @@ final class TypeInt extends DataType
      * Instantiate int
      * @param int  $value
      */
-	function __construct(int $value)
+	function __construct(int $value, int $length = 0)
 	{
-		$this->value = $value;
+		$this->value 	= $value;
+		$this->length 	= $length;
 	}
 
 	/**

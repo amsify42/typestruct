@@ -25,14 +25,21 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
     private $type;
 
     /**
+     * Length of array 
+     * @var int
+     */
+    private $length = 0;
+
+    /**
      * Instantiate and validate array
      * @param array  $array
      * @param string $type
      */
-	function __construct(array $array, string $type = 'mixed')
+	function __construct(array $array, string $type = 'mixed', int $length = 0)
 	{
         $this->array    = $this->validate($array, $type);
         $this->type     = $type;
+        $this->length   = $length;
         $this->position = 0;
 	}
 
@@ -81,6 +88,15 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * Get length of array
+     * @return int
+     */
+    public function getLength(): int
+    {
+        return $this->length;
     }
 
     /**

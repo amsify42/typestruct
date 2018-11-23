@@ -10,9 +10,10 @@ final class TypeString extends DataType
      * Instantiate string
      * @param string  $value
      */
-	function __construct(string $value)
+	function __construct(string $value, int $length = 0)
 	{
-		$this->value = $value;
+		$this->value 	= $value;
+		$this->length 	= $length;
 	}
 
 	/**

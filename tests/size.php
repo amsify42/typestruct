@@ -14,12 +14,14 @@ $autoLoader = new Amsify42\TypeStruct\AutoLoader();
 $autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
 $autoLoader->register();
 
-$object 		= new \stdClass();
-$object->id 	= 42;
-$object->name 	= 'Prod42';
-$object->price 	= 42.42;
-$object->mixed 	= '4354';
-$struct 		= new \TestTS\resources\structs\Size($object);
-dumP($struct);
+$object 				= new \stdClass();
+$object->id 			= 42;
+$object->name 			= 'Prod42';
+$object->price 			= 42.42;
+$object->accessories 	= ['one', 'two'];
+$struct 				= new \TestTS\resources\structs\Size($object);
+
+$struct->price = 4.0;
+dumP($struct->getData());
 
 if($execTime) executionTime($start);

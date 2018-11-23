@@ -10,9 +10,11 @@ final class TypeFloat extends DataType
      * Instantiate float
      * @param float  $value
      */
-	function __construct(float $value)
+	function __construct(float $value, int $length = 0, int $decimal = 0)
 	{
-		$this->value = $value;
+		$this->value 	= $value;
+		$this->length 	= $length;
+		$this->decimal 	= $decimal;
 	}
 
 	/**
