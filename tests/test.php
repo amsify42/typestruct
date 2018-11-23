@@ -1,14 +1,13 @@
 <?php
-
+declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
-
 // Using Whoops for testing
 $whoops = new \Whoops\Run();
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
 $execTime 	= true;
-$test 		= 'autoload'; // ('core', 'class', 'simple', 'autoload')
+$test 		= 'autoload'; // ('core', 'class', 'simple', 'types', 'autoload')
 
 
 if($execTime) $start = microtime(true);
@@ -34,26 +33,29 @@ if($test == 'core') {
 	//$struct = 1;
 	//dumP($struct); die;
 
-	echo $struct->name.'<br/>';
+	//echo $struct->name.'<br/>';
 	// $array = $struct->name->explode(',')->usort(function($value, $index){
 
 	// });
-	$array = $struct->name->explode('i')->reverse();
-	dumP($array);
+	//$array = $struct->name->explode('i')->reverse();
+	//dumP($array);
 	
 	// echo $struct->name.'<br/>';
-	$price = $struct->price->ceil()->floor();
-	dumP($price);
+	// $price = $struct->price->ceil()->floor();
+	// dumP($price);
 	// echo ($struct->id->value()/2).'<br/>';
 	// echo $struct->someEl->someChild->key4.'<br/>';
-	// echo count($struct->items).'<br/>';
-	// echo $struct->items[1].'<br/><br/>';
-	// foreach($struct->items as $key => $item) {
-	// 	echo $item.'<br/>';	
-	// }
-	// $string = $struct->items->implode(',');
-	// dumP($string);
-	// die;
+
+
+	dumP($struct->items).'<br/>';
+	echo $struct->items[1].'<br/><br/>';
+	$struct->items[1] = 4.2;
+	foreach($struct->items as $key => $item) {
+		echo $item.'<br/>';	
+	}
+	$string = $struct->items->implode(',');
+	dumP($string);
+	die;
 
 	// dumP($struct->someEl->someChild->someAgainChild);
 	// $obj = new \stdClass();
@@ -66,7 +68,11 @@ if($test == 'core') {
 
 	// $struct->someEl->someChild->someAgainChild->key56 = [true, false, false];
 	// dumP($struct->someEl->someChild->someAgainChild->key56);
-	// dumP($struct->someEl->someChild->someAgainChild);
+	foreach($struct->someEl->someChild->someAgainChild->key56 as $el) {
+		dumP($el);
+	}
+	$struct->someEl->someChild->someAgainChild->key56[0] = false;
+	dumP($struct->someEl->someChild->someAgainChild->key56);
 	// $struct->someEl->someChild->someAgainChild->key5 = 'new string';
 	// dumP($struct->someEl->someChild->someAgainChild->key5);
 
@@ -102,6 +108,16 @@ if($test == 'core') {
 	$object->mixed 	= '4354';
 	$struct 		= new \TestTS\resources\structs\Simple($object);
 	dumP($struct);
+
+} else if($test == 'types') {
+
+	$int 	= typeInt(1);
+	$str 	= typeStr('some');
+	$float 	= typeFloat(1.2);
+	$bool 	= typeBool(true);
+	$arr 	= typeArr([1,2,3]);
+	$val 	= tsTypeVal(23);
+	dumP($int, $str, $float, $bool, $arr, $val);
 
 } else if($test == 'autoload') {
 

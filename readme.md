@@ -1,5 +1,4 @@
 [![Latest Stable Version](https://poser.pugx.org/amsify42/typestruct/v/stable)](https://packagist.org/packages/amsify42/typestruct)
-[![Total Downloads](https://poser.pugx.org/amsify42/typestruct/downloads)](https://packagist.org/packages/amsify42/typestruct)
 [![Latest Unstable Version](https://poser.pugx.org/amsify42/typestruct/v/unstable)](https://packagist.org/packages/amsify42/typestruct)
 [![License](https://poser.pugx.org/amsify42/typestruct/license)](https://packagist.org/packages/amsify42/typestruct)
 
@@ -14,16 +13,20 @@ composer require amsify42/typestruct
 ```
 
 ## Table of Contents
-1. [Registering Autoloader](#registering-autoloader)
-2. [Typestruct file](#typestruct-file)
-3. [Usage](#usage)
-4. [Multi Level Example](#multi-level-example)
-5. [Data Types](#data-types)
-6. [Built-in Functions](#built-in-functions)
-7. [Manual Validation](#manual-validation)
+1. [Registering Autoloader](#1-registering-autoloader)
+2. [Typestruct file](#2-typestruct-file)
+3. [Usage](#3-usage)
+4. [Multi Level Example](#4-multi-level-example)
+5. [Data Types](#5-data-types)
+6. [Built-in Functions](#6-built-in-functions)
+7. [Direct Validation](#7-direct-validation)
 
-### Registering Autoloader
-
+### 1. Registering Autoloader
+Why Autoloader needs to be registered though we are using composer for psr4 autoload?
+<br/>
+**Answer:** The files we are going to create for typestruct does not contain PHP syntax and needs to be processed before it is being autoload by composer or some other way.
+<br/>
+This is how we can register autoloader.
 ```php
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -45,7 +48,7 @@ $autoLoader->setCustom(function($class){
 $autoLoader->register();
 ```
 
-### Typestruct file
+### 2. Typestruct file
 
 After registering is done, you can create your typestruct file
 ```php
@@ -59,7 +62,7 @@ export typestruct Simple {
 ```
 **Note:** This is not php syntax, this file content will be converted to php equivalent class while processing.
 
-### Usage
+### 3. Usage
 
 ```php
 $data = new \stdClass();
@@ -67,17 +70,16 @@ $data->id = 42;
 $data->name = 'Prod42';
 $data->price = 4.2;
 // [OR]
-$data ['id' => 42, 'name' => 'Prod42', 'price' => 4.2];
+$data = ['id' => 42, 'name' => 'Prod42', 'price' => 4.2];
 
 $struct = new \App\TypeStructs\Simple($data);
 $response = $struct->getResponse();
 ```
-You will get type errors incase your object structure and its types does not match with **Simple** structure<br/><br/>
-If you set **setValidateFull()** while registering as true, you will receive errors in **getResponse()** else run time exception will be thrown while validating itself
-
+You will get type errors incase your object structure and its types does not match with **Simple** structure.
+<br/>
+If you set **setValidateFull()** while registering as true, you will receive errors in **getResponse()** else run time exception will be thrown while validating itself.
 <br/><br/>
-Suppose your object is validated as true, now you want to change the property of the typestruct object
-
+Suppose your object is validated as true, now you want to change the property of the typestruct object.
 ```php
 $struct->id = '23'; // You'll receive an exception error as id is of type int and you tried to assign string
 ```
@@ -90,7 +92,7 @@ But if you are looking to perform operations on these properties, you need to ca
 echo $struct->price->value()/2;	
 ```
 
-### Multi Level Example
+### 4. Multi Level Example
 You can create typestruct of multi-level object which resembles the javascript object or json structure
 
 ```php
@@ -131,7 +133,7 @@ $struct = new \App\TypeStructs\Sample($data); // Pass data of stdClass or array 
 ```
 **Important Note:** The response you get in **$struct** variable will be of type object. Only those keys which represent array in typestruct file can be used as array.
 
-### Data Types
+### 5. Data Types
 
 #### Supported Data Types
 1. string
@@ -142,7 +144,7 @@ $struct = new \App\TypeStructs\Sample($data); // Pass data of stdClass or array 
 6. any
 7. YourClass
 
-**Note:** 7th type is a class type, it can be any class.
+**Note:** 7th type is of class type, it can be any class.
 
 #### For Array types
 1. array
@@ -156,22 +158,32 @@ $struct = new \App\TypeStructs\Sample($data); // Pass data of stdClass or array 
 **Note:** Both **array** and **[]** are same and represent the general or mixed array, 7th array is of type class resource.
 
 #### Usage
-You can instantiate data types from data type classes, below are the examples:
+You can initialize variables with data type classes, below are the examples:
 ```php
-	$string = new Amsify42\Typestruct\DataType\TypeString('some_string');
-	$int 	= new Amsify42\Typestruct\DataType\TypeInt(42);
-	$float 	= new Amsify42\Typestruct\DataType\TypeFloat(4.2);
-	// For Array the default value of 2nd param is 'mixed', you can pass other data type listed above
-	$array 	= new Amsify42\Typestruct\DataType\TypeArray([4, 2], 'mixed');
-	$bool 	= new Amsify42\Typestruct\DataType\TypeBool(true);
+$string = new Amsify42\Typestruct\DataType\TypeString('string');
+$int 	= new Amsify42\Typestruct\DataType\TypeInt(42);
+$float 	= new Amsify42\Typestruct\DataType\TypeFloat(4.2);
+$bool 	= new Amsify42\Typestruct\DataType\TypeBool(true);
+
+// For Array the default value of 2nd param is 'mixed', you can pass other data type listed above
+$array 	= new Amsify42\Typestruct\DataType\TypeArray([4, 2], 'mixed');
 ```
 For dynamically getting instance of value you don't know which type it is
 ```php
-	$value = Amsify42\TypeStruct\Helper\DataType::getValue($variable);
+$value = Amsify42\TypeStruct\Helper\DataType::getValue($variable);
+```
+or you can do the same with helper methods
+```php
+$string = typeStr('string');
+$int 	= typeInt(4);
+$float 	= typeFloat(4.2);
+$bool 	= typeBool(true);
+$array 	= typeArr([4,2], 'mixed');
+$val 	= tsTypeVal('42');
 ```
 
-### Built-in Functions
-You can call built-in global functions of PHP as a chain with the properties of typestruct object properties or with variable of datatype.
+### 6. Built-in Functions
+You can call built-in functions of PHP as a chain with the properties of typestruct object properties or with variable of datatype.
 ```php
 $string->explode(',')->implode(',');
 ```
@@ -185,8 +197,8 @@ $string->explode(',')->reverse(); // array_reverse as reverse
 ```
 <br/>
 
-### Manual Validation
-You can validate the data with typestruct structure without using autoloader
+### 7. Direct Validation
+You can also validate the data with typestruct class without using autoloader
 
 #### TypeStruct File
 ```php
@@ -209,14 +221,14 @@ $validator->setPath('path/to/Address.php');
 ```
 You can pass both array or object of same structure which **Address** typestruct expects
 ```php	
-$address ['door' => '10-11-1323', 'pincode' => 524278, 'city' => 'MyCity'];
+$address = ['door' => '10-11-1323', 'pincode' => 524278, 'city' => 'MyCity'];
 // [OR]
 $address = new \stdClass;
 $address->door = '10-11-1323';
 $address->pincode = 524278;
 $address->city = 'MyCity';
 ```
-You can get the struct object here in both case, whether validated or not with detail error information(if not validated).
+You will get the struct object here in both cases, whether validated or not with status and error information(if not validated).
 ```php
 $struct = $validator->getTypeStruct($address);
 ```

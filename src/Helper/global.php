@@ -23,7 +23,7 @@ if(!function_exists('pathKey'))
 	 * @param  string $token
 	 * @return string
 	 */
-	function pathKey(string $path, string $name, string $token = '->'): string
+	function pathKey($path, string $name, string $token = '->'): string
 	{
 		return ($path)? ltrim($path, $token).$token.$name: $name;
 	}
@@ -92,6 +92,57 @@ if(!function_exists('arrayToObject'))
 	     }
 	  }
 	  return $obj;
+	}
+}
+
+/**
+ * Data Types Global Helpers
+ */
+if(!function_exists('typeStr'))
+{
+	function typeStr(string $value)
+	{
+		return new \Amsify42\TypeStruct\DataType\TypeString($value);
+	}
+}
+
+if(!function_exists('typeInt'))
+{
+	function typeInt(int $value)
+	{
+		return new \Amsify42\TypeStruct\DataType\TypeInt($value);
+	}
+}
+
+if(!function_exists('typeFloat'))
+{
+	function typeFloat(float $value)
+	{
+		return new \Amsify42\TypeStruct\DataType\TypeFloat($value);
+	}
+}
+
+if(!function_exists('typeBool'))
+{
+	function typeBool(bool $value)
+	{
+		return new \Amsify42\TypeStruct\DataType\TypeBool($value);
+	}
+}
+
+if(!function_exists('typeArr'))
+{
+	function typeArr(array $value, string $type = 'mixed')
+	{
+		return new \Amsify42\TypeStruct\DataType\TypeArray($value, $type);
+	}
+}
+
+if(!function_exists('tsTypeVal'))
+{
+	function tsTypeVal($value)
+	{
+		return \Amsify42\TypeStruct\Helper\DataType::getValue($value);
 	}
 }
 
