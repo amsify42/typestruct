@@ -3,6 +3,7 @@
 namespace Amsify42\TypeStruct\Helper;
 
 use Amsify42\TypeStruct\DataType as DataTypes;
+use Amsify42\TypeStruct\Core\DataType as DtType;
 use stdClass;
 
 class DataType
@@ -155,6 +156,8 @@ class DataType
 		if($property instanceof DataTypes\TypeString) {
 			if(is_string($value)) {
 				return new DataTypes\TypeString($value, $property->getLength());
+			} else if($value instanceof DataTypes\TypeString && $value->getLength() == $property->getLength()) {
+				return $value;
 			} else {
 				$type 		= 'string';
 				$isAssign 	= false;
@@ -162,6 +165,8 @@ class DataType
 		} else if($property instanceof DataTypes\TypeInt) {
 			if(is_int($value)) {
 				return new DataTypes\TypeInt($value, $property->getLength());
+			} else if($value instanceof DataTypes\TypeInt && $value->getLength() == $property->getLength()) {
+				return $value;
 			} else {
 				$type 		= 'integer';
 				$isAssign 	= false;
@@ -169,6 +174,8 @@ class DataType
 		} else if($property instanceof DataTypes\TypeFloat) {
 			if(is_float($value)) {
 				return new DataTypes\TypeFloat($value, $property->getLength(), $property->getDecimal());
+			} else if($value instanceof DataTypes\TypeFloat && $value->getLength() == $property->getLength() && $value->getDecimal() == $property->getDecimal()) {
+				return $value;
 			} else {
 				$type 		= 'float';
 				$isAssign 	= false;
@@ -176,6 +183,8 @@ class DataType
 		} else if($property instanceof DataTypes\TypeBool) {
 			if(is_bool($value)) {
 				return new DataTypes\TypeBool($value);
+			} else if($value instanceof DataTypes\TypeBool) {
+				return $value;
 			} else {
 				$type 		= 'float';
 				$isAssign 	= false;
@@ -183,6 +192,8 @@ class DataType
 		} else if($property instanceof DataTypes\TypeArray) {
 			if(is_array($value)) {
 				return new DataTypes\TypeArray($value, $property->getType());
+			} else if($value instanceof DataTypes\TypeArray && $value->getLength() == $property->getLength()) {
+				return $value;
 			} else {
 				$type 		= 'array';
 				$isAssign 	= false;
@@ -235,7 +246,7 @@ class DataType
 	public static function checkType(string $name, $value, array $type): array
 	{
 		$result = ['isValid' => true, 'message' => ''];
-		$vType 	= $type['type']['type'];
+		$vType 	= $type['type'];
 		switch($vType) {
 			case 'string':
 				if(!is_string($value) && !$value instanceof DataTypes\TypeString) {
@@ -285,6 +296,24 @@ class DataType
 				}
 				break;
 		}
+		if($result['isValid'] && $type['length']) {
+			$result = self::checkLength($value, $vType, $type['length']);
+		}
+		return $result;
+	}
+
+	public static function checkLength($value, string $type, int $length): array
+	{
+		$result = ['isValid' => true, 'message' => ''];
+		$val 	= ($value instanceof DtType)? (string)$value->value(): (string)$value;
+		if($type == 'float' || $value instanceof TypeFloat) {
+			$val = explode('.', $val)[0];
+		}
+		$length = strlen($val);
+		if($length > $length) {
+			$result['isValid'] = false;
+			$result['message'] = "Max length allowed for '".$name."' is ".$length;
+		}
 		return $result;
 	}
 
@@ -308,8 +337,17 @@ class DataType
 	 */
 	public static function checkArrayType(string $name, $value, array $info): array
 	{
-		$result = ['isValid' => true, 'message' => '', 'value' => []];
-		if(isset($info['of']) && (is_array($value) || $value instanceof DataTypes\TypeArray)) {
+		$result 		= ['isValid' => true, 'message' => '', 'value' => []];
+		$isArray 		= is_array($value);
+		$isTypeArray	= $value instanceof DataTypes\TypeArray;
+		if($info['length']) {
+			if(($isArray && sizeof($value) > $info['length']) || ($isTypeArray && $value->count() > $info['length'])) {
+				$result['isValid'] = false;
+				$result['message'] = "Max length allowed for '".$name."' is ".$info['length'];
+				return $result;
+			}
+		}
+		if(isset($info['of']) && ($isArray || $isTypeArray)) {
 			if($info['of'] == 'string') {
 				foreach($value as $vk => $el) {
 					if(!is_string($el) && !$el instanceof DataTypes\TypeString) {
@@ -363,7 +401,7 @@ class DataType
 				}
 			}
 		} else {
-			if(!is_array($value) && !$value instanceof DataTypes\TypeArray) {
+			if(!$isArray && !$isTypeArray) {
 				$result['isValid'] 	= false;
 				$result['message'] 	= $name.' must be array';
 			} else {
