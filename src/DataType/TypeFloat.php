@@ -12,7 +12,7 @@ final class TypeFloat extends DataType
      */
 	function __construct(float $value, int $length = 0, int $decimal = 0)
 	{
-		$this->value 	= $value;
+		$this->value 	= ($decimal)? (float)number_format($value, $decimal, '.', ''): $value;
 		$this->length 	= $length;
 		$this->decimal 	= $decimal;
 	}

@@ -151,31 +151,63 @@ class DataType
 	 */
 	public static function assign(string $name, $property, $value)
 	{
+		$length 	= 0;
 		$type 		= 'mixed';
 		$isAssign 	= true;
 		if($property instanceof DataTypes\TypeString) {
 			if(is_string($value)) {
-				return new DataTypes\TypeString($value, $property->getLength());
-			} else if($value instanceof DataTypes\TypeString && $value->getLength() == $property->getLength()) {
-				return $value;
+				if(strlen((string)$value) <= $property->getLength()) {
+					return new DataTypes\TypeString($value, $property->getLength());
+				} else {
+					$length 	= $property->getLength();
+					$isAssign 	= false;
+				}
+			} else if($value instanceof DataTypes\TypeString) {
+				if($value->getLength() == $property->getLength()) {
+					return $value;
+				} else {
+					$length 	= $property->getLength();
+					$isAssign 	= false;	
+				}
 			} else {
 				$type 		= 'string';
 				$isAssign 	= false;
 			}
 		} else if($property instanceof DataTypes\TypeInt) {
-			if(is_int($value)) {
-				return new DataTypes\TypeInt($value, $property->getLength());
-			} else if($value instanceof DataTypes\TypeInt && $value->getLength() == $property->getLength()) {
-				return $value;
+			if(is_int($value)) { 
+				if(strlen((string)$value) <= $property->getLength()) {
+					return new DataTypes\TypeInt($value, $property->getLength());
+				} else {
+					$length 	= $property->getLength();
+					$isAssign 	= false;
+				}
+			} else if($value instanceof DataTypes\TypeInt) {
+				if($value->getLength() == $property->getLength()) {
+					return $value;
+				} else {
+					$length 	= $property->getLength();
+					$isAssign 	= false;
+				}
 			} else {
 				$type 		= 'integer';
 				$isAssign 	= false;
 			}
 		} else if($property instanceof DataTypes\TypeFloat) {
 			if(is_float($value)) {
-				return new DataTypes\TypeFloat($value, $property->getLength(), $property->getDecimal());
-			} else if($value instanceof DataTypes\TypeFloat && $value->getLength() == $property->getLength() && $value->getDecimal() == $property->getDecimal()) {
-				return $value;
+				$val = explode('.', $value)[0];
+				if(strlen((string)$val) <= $property->getLength()) {
+					return new DataTypes\TypeFloat($value, $property->getLength(), $property->getDecimal());
+				} else {
+					$length 	= $property->getLength();
+					$isAssign 	= false;
+				}
+			} else if($value instanceof DataTypes\TypeFloat) {
+				if($value->getLength() == $property->getLength() && $value->getDecimal() == $property->getDecimal()) {
+					return $value;
+				} else {
+					$length 	= $property->getLength();
+					$isAssign 	= false;
+				}
 			} else {
 				$type 		= 'float';
 				$isAssign 	= false;
@@ -191,9 +223,19 @@ class DataType
 			}
 		} else if($property instanceof DataTypes\TypeArray) {
 			if(is_array($value)) {
-				return new DataTypes\TypeArray($value, $property->getType());
-			} else if($value instanceof DataTypes\TypeArray && $value->getLength() == $property->getLength()) {
-				return $value;
+				if(count($value) <= $property->getLength()) {
+					return new DataTypes\TypeArray($value, $property->getType());
+				} else {
+					$length 	= $property->getLength();
+					$isAssign 	= false;
+				}
+			} else if($value instanceof DataTypes\TypeArray) {
+				if($value->getLength() == $property->getLength()) {
+					return $value;
+				} else {
+					$length 	= $property->getLength();
+					$isAssign 	= false;
+				}
 			} else {
 				$type 		= 'array';
 				$isAssign 	= false;
@@ -210,7 +252,11 @@ class DataType
 		if($isAssign) {
 			return $value;
 		} else {
-			throw new \RuntimeException("Property: ".$name." - Trying to assign '".self::getType($value)."' expected '".$type."'");
+			if($length) {
+				throw new \RuntimeException("Max length allowed for '".$name."' is ".$length);
+			} else {
+				throw new \RuntimeException("Property: ".$name." - Trying to assign '".self::getType($value)."' expected '".$type."'");
+			}
 		}
 	}
 

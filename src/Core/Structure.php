@@ -116,7 +116,7 @@ class Structure
 							break;
 						}
 					 } else {
-						$data->{$name} = Helper\DataType::getInstance($data->{$name}, ['type' => $type]);
+						$data->{$name} = Helper\DataType::getInstance($data->{$name}, $type);
 					 }
 				}
 			}			
