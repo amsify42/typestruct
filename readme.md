@@ -16,7 +16,7 @@ composer require amsify42/typestruct
 1. [Registering Autoloader](#1-registering-autoloader)
 2. [Typestruct file](#2-typestruct-file)
 3. [Usage](#3-usage)
-4. [Multi Level Example](#4-multi-level-example)
+4. [Data Size](#4-data-size)
 5. [Data Types](#5-data-types)
 6. [Built-in Functions](#6-built-in-functions)
 7. [Direct Validation](#7-direct-validation)
@@ -92,7 +92,7 @@ But if you are looking to perform operations on these properties, you need to ca
 echo $struct->price->value()/2;	
 ```
 
-### 4. Multi Level Example
+#### Multi Level Example
 You can create typestruct of multi-level object which resembles the javascript object or json structure
 
 ```php
@@ -132,6 +132,23 @@ All the above key value pairs will be validated based on their types.
 $struct = new \App\TypeStructs\Sample($data); // Pass data of stdClass or array which agrees to Sample structure
 ```
 **Important Note:** The response you get in **$struct** variable will be of type object. Only those keys which represent array in typestruct file can be used as array.
+
+
+### 4. Data Size (Under Development...)
+You can also rectrict data size for all the types
+```php
+namespace App\TypeStructs;
+
+export typestruct Simple {
+	id: int(5),
+	name: string(100),
+	price: float(5.2),
+	accessories: string[10]
+}
+```
+**Important Points:**
+1. The size we pass for float contains two parts separated by **dot** with no spaces, the number after dot represents fraction digits.
+2. For array size, you can simply set the number between square braces.
 
 ### 5. Data Types
 

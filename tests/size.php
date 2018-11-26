@@ -18,10 +18,11 @@ $object 				= new \stdClass();
 $object->id 			= 42443;
 $object->name 			= 'Prod42';
 $object->price 			= 42.42;
-$object->accessories 	= ['one', 'two'];
+$object->accessories 	= ['one', 'two', 'three', 'four'];
 $struct 				= new \TestTS\resources\structs\Size($object);
 
-$struct->price = 43466.01;
+$struct->price 			= 43466.01;
+$struct->accessories 	= ['one', 'two', 'three', 'four', 'five'];
 dumP($struct->getData());
 
 if($execTime) executionTime($start);

@@ -156,14 +156,14 @@ class DataType
 		$isAssign 	= true;
 		if($property instanceof DataTypes\TypeString) {
 			if(is_string($value)) {
-				if(strlen((string)$value) <= $property->getLength()) {
+				if(!$property->getLength() || strlen((string)$value) <= $property->getLength()) {
 					return new DataTypes\TypeString($value, $property->getLength());
 				} else {
 					$length 	= $property->getLength();
 					$isAssign 	= false;
 				}
 			} else if($value instanceof DataTypes\TypeString) {
-				if($value->getLength() == $property->getLength()) {
+				if(!$property->getLength() || $value->getLength() == $property->getLength()) {
 					return $value;
 				} else {
 					$length 	= $property->getLength();
@@ -174,15 +174,15 @@ class DataType
 				$isAssign 	= false;
 			}
 		} else if($property instanceof DataTypes\TypeInt) {
-			if(is_int($value)) { 
-				if(strlen((string)$value) <= $property->getLength()) {
+			if(is_int($value)) {
+				if(!$property->getLength() || strlen((string)$value) <= $property->getLength()) {
 					return new DataTypes\TypeInt($value, $property->getLength());
 				} else {
 					$length 	= $property->getLength();
 					$isAssign 	= false;
 				}
 			} else if($value instanceof DataTypes\TypeInt) {
-				if($value->getLength() == $property->getLength()) {
+				if(!$property->getLength() || $value->getLength() == $property->getLength()) {
 					return $value;
 				} else {
 					$length 	= $property->getLength();
@@ -195,14 +195,14 @@ class DataType
 		} else if($property instanceof DataTypes\TypeFloat) {
 			if(is_float($value)) {
 				$val = explode('.', $value)[0];
-				if(strlen((string)$val) <= $property->getLength()) {
+				if(!$property->getLength() || strlen((string)$val) <= $property->getLength()) {
 					return new DataTypes\TypeFloat($value, $property->getLength(), $property->getDecimal());
 				} else {
 					$length 	= $property->getLength();
 					$isAssign 	= false;
 				}
 			} else if($value instanceof DataTypes\TypeFloat) {
-				if($value->getLength() == $property->getLength() && $value->getDecimal() == $property->getDecimal()) {
+				if(!$property->getLength() || $value->getLength() == $property->getLength() && $value->getDecimal() == $property->getDecimal()) {
 					return $value;
 				} else {
 					$length 	= $property->getLength();
@@ -223,14 +223,14 @@ class DataType
 			}
 		} else if($property instanceof DataTypes\TypeArray) {
 			if(is_array($value)) {
-				if(count($value) <= $property->getLength()) {
+				if(!$property->getLength() || count($value) <= $property->getLength()) {
 					return new DataTypes\TypeArray($value, $property->getType());
 				} else {
 					$length 	= $property->getLength();
 					$isAssign 	= false;
 				}
 			} else if($value instanceof DataTypes\TypeArray) {
-				if($value->getLength() == $property->getLength()) {
+				if(!$property->getLength() || $value->getLength() == $property->getLength()) {
 					return $value;
 				} else {
 					$length 	= $property->getLength();
@@ -342,7 +342,7 @@ class DataType
 				}
 				break;
 		}
-		if($result['isValid'] && $type['length']) {
+		if($result['isValid'] && isset($type['length']) && $type['length']) {
 			$result = self::checkLength($value, $vType, $type['length']);
 		}
 		return $result;
@@ -386,7 +386,7 @@ class DataType
 		$result 		= ['isValid' => true, 'message' => '', 'value' => []];
 		$isArray 		= is_array($value);
 		$isTypeArray	= $value instanceof DataTypes\TypeArray;
-		if($info['length']) {
+		if(isset($info['length']) && $info['length']) {
 			if(($isArray && sizeof($value) > $info['length']) || ($isTypeArray && $value->count() > $info['length'])) {
 				$result['isValid'] = false;
 				$result['message'] = "Max length allowed for '".$name."' is ".$info['length'];
