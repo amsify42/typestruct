@@ -134,6 +134,9 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
 
     public function offsetSet($offset, $value)
     {
+        if($this->length && $this->count() >= $this->length) {
+            throw new \RuntimeException("Max length allowed for Array is ".$this->length);
+        }
         if(DataType::isValid($value, $this->type)) {
             if(is_null($offset)) {
                 $this->array[] = DataType::getValue($value);

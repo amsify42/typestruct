@@ -22,7 +22,8 @@ $object->accessories 	= ['one', 'two', 'three', 'four'];
 $struct 				= new \TestTS\resources\structs\Size($object);
 
 $struct->price 			= 43466.01;
-$struct->accessories 	= ['one', 'two', 'three', 'four', 'five'];
+$struct->accessories 	= ['one', 'two', 'three', 'four'];
+//$struct->accessories[] 	= 'five';
 dumP($struct->getData());
 
 if($execTime) executionTime($start);

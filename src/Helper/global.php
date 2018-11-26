@@ -100,25 +100,25 @@ if(!function_exists('arrayToObject'))
  */
 if(!function_exists('typeStr'))
 {
-	function typeStr(string $value)
+	function typeStr(string $value, int $size = 0)
 	{
-		return new \Amsify42\TypeStruct\DataType\TypeString($value);
+		return new \Amsify42\TypeStruct\DataType\TypeString($value, $size);
 	}
 }
 
 if(!function_exists('typeInt'))
 {
-	function typeInt(int $value)
+	function typeInt(int $value, int $size = 0)
 	{
-		return new \Amsify42\TypeStruct\DataType\TypeInt($value);
+		return new \Amsify42\TypeStruct\DataType\TypeInt($value, $size);
 	}
 }
 
 if(!function_exists('typeFloat'))
 {
-	function typeFloat(float $value)
+	function typeFloat(float $value, int $size = 0, int $decimal = 0)
 	{
-		return new \Amsify42\TypeStruct\DataType\TypeFloat($value);
+		return new \Amsify42\TypeStruct\DataType\TypeFloat($value, $size, $decimal);
 	}
 }
 
@@ -132,9 +132,9 @@ if(!function_exists('typeBool'))
 
 if(!function_exists('typeArr'))
 {
-	function typeArr(array $value, string $type = 'mixed')
+	function typeArr(array $value, string $type = 'mixed', int $size = 0)
 	{
-		return new \Amsify42\TypeStruct\DataType\TypeArray($value, $type);
+		return new \Amsify42\TypeStruct\DataType\TypeArray($value, $type, $size);
 	}
 }
 

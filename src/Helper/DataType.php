@@ -111,7 +111,7 @@ class DataType
 			if($value instanceof DataTypes\TypeArray) {
 				return $value;
 			} else {
-				return new DataTypes\TypeArray($value, isset($type['of'])? $type['of']: 'mixed');
+				return new DataTypes\TypeArray($value, isset($type['of'])? $type['of']: 'mixed', isset($type['length'])? $type['length']: 0);
 			}
 		} else if($type['type'] == 'string') {
 			if($value instanceof DataTypes\TypeString) {
@@ -224,7 +224,7 @@ class DataType
 		} else if($property instanceof DataTypes\TypeArray) {
 			if(is_array($value)) {
 				if(!$property->getLength() || count($value) <= $property->getLength()) {
-					return new DataTypes\TypeArray($value, $property->getType());
+					return new DataTypes\TypeArray($value, $property->getType(), $property->getLength());
 				} else {
 					$length 	= $property->getLength();
 					$isAssign 	= false;
