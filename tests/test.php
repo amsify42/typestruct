@@ -7,7 +7,7 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
 $execTime 	= true;
-$test 		= 'core'; // ('core', 'class', 'simple', 'types', 'autoload')
+$test 		= 'autoload'; // ('core', 'class', 'simple', 'types', 'autoload')
 
 
 if($execTime) $start = microtime(true);
@@ -47,15 +47,15 @@ if($test == 'core') {
 	// echo $struct->someEl->someChild->key4.'<br/>';
 
 
-	// dumP($struct->items).'<br/>';
-	// echo $struct->items[1].'<br/><br/>';
-	// $struct->items[1] = 4.2;
-	// foreach($struct->items as $key => $item) {
-	// 	echo $item.'<br/>';	
-	// }
-	// $string = $struct->items->implode(',');
-	// dumP($string);
-	// die;
+	dumP($struct->items).'<br/>';
+	echo $struct->items[1].'<br/><br/>';
+	$struct->items[1] = 4.2;
+	foreach($struct->items as $key => $item) {
+		echo $item.'<br/>';	
+	}
+	$string = $struct->items->implode(',')->explode(',');
+	dumP($string);
+	//die;
 
 	// dumP($struct->someEl->someChild->someAgainChild);
 	// $obj = new \stdClass();
@@ -67,11 +67,11 @@ if($test == 'core') {
 
 
 	$struct->someEl->someChild->someAgainChild->key56 = [true, false, false];
-	// dumP($struct->someEl->someChild->someAgainChild->key56);
-	foreach($struct->someEl->someChild->someAgainChild->key56 as $el) {
-		dumP($el);
-	}
-	$struct->someEl->someChild->someAgainChild->key56->push(false);
+	dumP($struct->someEl->someChild->someAgainChild->key56);
+	// foreach($struct->someEl->someChild->someAgainChild->key56 as $el) {
+	// 	dumP($el);
+	// }
+	dumP($struct->someEl->someChild->someAgainChild->key56->pop()->push(true));
 	dumP($struct->someEl->someChild->someAgainChild->key56);
 	// $struct->someEl->someChild->someAgainChild->key5 = 'new string';
 	// dumP($struct->someEl->someChild->someAgainChild->key5);

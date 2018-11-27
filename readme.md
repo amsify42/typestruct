@@ -5,6 +5,11 @@
 ## TypeStruct
 
 PHP library for defining strictly typed multi-level object structure.
+<br/>
+**Purpose:** The reason why the idea of developing this package came into existence:
+1. To validate the multi-level data of object [or] array of key value pairs, that could either come from form submission [or] through APIs.
+2. To validate the structure of data and their types.
+3. To modify PHP variables to the best possible object oriented way. 
 
 ### Installation
 
@@ -134,7 +139,7 @@ $struct = new \App\TypeStructs\Sample($data); // Pass data of stdClass or array 
 **Important Note:** The response you get in **$struct** variable will be of type object. Only those keys which represent array in typestruct file can be used as array.
 
 
-### 4. Data Size (Under Development...)
+### 4. Data Size
 You can also rectrict data size for all the types
 ```php
 namespace App\TypeStructs;

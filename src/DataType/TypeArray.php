@@ -3,6 +3,7 @@
 namespace Amsify42\TypeStruct\DataType;
 
 use Amsify42\TypeStruct\Helper\DataType;
+use Amsify42\TypeStruct\DataType as DataTypes;
 
 final class TypeArray implements \Iterator, \ArrayAccess, \Countable 
 {
@@ -16,13 +17,13 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
      * Array data
      * @var array
      */
-	private $array;
+	private $array = [];
 
     /**
      * Type of Array 
      * @var string
      */
-    private $type;
+    private $type = 'mixed';
 
     /**
      * Length of array 
@@ -37,9 +38,9 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
      */
 	function __construct(array $array, string $type = 'mixed', int $length = 0)
 	{
-        $this->array    = $this->validate($array, $type);
         $this->type     = $type;
         $this->length   = $length;
+        $this->array    = $this->validate($array, $type);
         $this->position = 0;
 	}
 
@@ -53,17 +54,25 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
     {
         $name = decideFunction($name, 'array_');
         if($name) {
+            $value = NULL;
             if(count($arguments)> 0 && in_array($name, TS_G_FUNCTIONS)) {
-                array_unshift($arguments, $this->array);
+                $value = $name($this->array, ...$arguments);
             } else {
-                $arguments[] = $this->array;
+                if(empty($arguments)) {
+                    $value = $name($this->array);    
+                } else {
+                    $arguments[] = $this->array;
+                    $value = $name(...$arguments);
+                }
             }
-            return DataType::getValue($name(...$arguments));
+            $this->array = $this->validate($this->array, $this->type);
+            return ($value instanceof DataTypes\TypeBool || is_bool($value))? $this: DataType::getValue($value);
         }
     }
 
     private function validate(array $array, string $type): array
     {
+        $this->checkLength();
         $newArray = [];
         if($type == 'mixed') {
             foreach($array as $nak => $value) {
@@ -134,9 +143,7 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
 
     public function offsetSet($offset, $value)
     {
-        if($this->length && $this->count() >= $this->length) {
-            throw new \RuntimeException("Max length allowed for Array is ".$this->length);
-        }
+        $this->checkLength();
         if(DataType::isValid($value, $this->type)) {
             if(is_null($offset)) {
                 $this->array[] = DataType::getValue($value);
@@ -145,6 +152,13 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
             }
         } else {
             throw new \RuntimeException("Array Type Error: Trying to assign '".DataType::getType($value)."' expected '".$this->type."'");
+        }
+    }
+
+    private function checkLength()
+    {
+        if($this->length && $this->count() >= $this->length) {
+            throw new \RuntimeException("Max length allowed for Array is ".$this->length);
         }
     }
 
