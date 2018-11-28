@@ -5,7 +5,7 @@
 ## TypeStruct
 
 PHP library for defining strictly typed multi-level structure validator.
-<br/>
+<br/><br/>
 **Objectives:**
 1. To validate the multi-level data of object [or] array of key value pairs, that could either come from form submission [or] through APIs.
 2. To validate the structure of data and their types.
