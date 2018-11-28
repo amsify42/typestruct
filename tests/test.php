@@ -7,7 +7,7 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
 $execTime 	= true;
-$test 		= 'core'; // ('core', 'class', 'simple', 'types', 'autoload')
+$test 		= 'autoload'; // ('core', 'class', 'simple', 'types', 'autoload')
 
 
 if($execTime) $start = microtime(true);
@@ -58,7 +58,7 @@ if($test == 'core') {
 	dumP($string->isArray());
 	dumP($array->isArray()->getLastResult());
 	dumP($string);
-	die;
+	//die;
 
 	// dumP($struct->someEl->someChild->someAgainChild);
 	// $obj = new \stdClass();
