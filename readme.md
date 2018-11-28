@@ -28,7 +28,7 @@ composer require amsify42/typestruct
 7. [Direct Validation](#7-direct-validation)
 
 ### 1. Registering Autoloader
-<hr\>
+---
 Why Autoloader needs to be registered though we are using composer for psr4 autoload?
 <br/>
 **Answer:** The files we are going to create for typestruct does not contain PHP syntax and needs to be processed before it is being autoload by composer or some other way.
@@ -56,7 +56,7 @@ $autoLoader->register();
 ```
 
 ### 2. Typestruct file
-<hr\>
+---
 After registering is done, you can create your typestruct file
 ```php
 namespace App\TypeStructs;
@@ -70,7 +70,7 @@ export typestruct Simple {
 **Note:** This is not php syntax, this file content will be converted to php equivalent class while processing.
 
 ### 3. Usage
-<hr\>
+---
 ```php
 $data = new \stdClass();
 $data->id = 42;
@@ -142,7 +142,7 @@ $struct = new \App\TypeStructs\Sample($data); // Pass data of stdClass or array 
 
 
 ### 4. Data Size
-<hr\>
+---
 You can also rectrict data size for all the types
 ```php
 namespace App\TypeStructs;
@@ -159,7 +159,7 @@ export typestruct Simple {
 2. For array size, you can simply set the number between square braces.
 
 ### 5. Data Types
-<hr\>
+---
 #### Supported Data Types
 1. string
 2. int
@@ -208,7 +208,7 @@ $val 	= tsTypeVal('42');
 ```
 
 ### 6. Built-in Functions
-<hr\>
+---
 You can call built-in functions of PHP as a chain with the properties of typestruct object properties or with variable of datatype.
 ```php
 $string->explode(',')->implode(',');
@@ -224,7 +224,7 @@ $string->explode(',')->reverse(); // array_reverse as reverse
 <br/>
 
 ### 7. Direct Validation
-<hr\>
+---
 You can also validate the data with typestruct class without using autoloader
 
 #### TypeStruct File
