@@ -32,6 +32,12 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
     private $length = 0;
 
     /**
+     * Last Result
+     * @var NULL
+     */
+    private $lastResult = NULL;
+
+    /**
      * Instantiate and validate array
      * @param array  $array
      * @param string $type
@@ -66,7 +72,13 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
                 }
             }
             $this->array = $this->validate($this->array, $this->type);
-            return ($value instanceof DataTypes\TypeBool || is_bool($value))? $this: DataType::getValue($value);
+            if($value instanceof DataTypes\TypeBool || is_bool($value)) {
+                $this->lastResult = DataType::getValue($value);
+                return $this;
+            } else {
+                $this->lastResult = NULL;
+                return DataType::getValue($value);
+            }
         }
     }
 
@@ -106,6 +118,15 @@ final class TypeArray implements \Iterator, \ArrayAccess, \Countable
     public function getLength(): int
     {
         return $this->length;
+    }
+
+    /**
+     * Get last result
+     * @return mixed
+     */
+    public function getLastResult()
+    {
+        return $this->lastResult;
     }
 
     /**

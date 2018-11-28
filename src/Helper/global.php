@@ -37,7 +37,7 @@ if(!function_exists('decideFunction'))
 	 * @param  string $prefix
 	 * @return string
 	 */
-	function decideFunction(string $name, string $prefix = ''): string
+	function decideFunction(string $name, string $prefix = ''): ?string
 	{
 		if(function_exists($name)) {
 			return $name;

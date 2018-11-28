@@ -7,7 +7,7 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
 $execTime 	= true;
-$test 		= 'autoload'; // ('core', 'class', 'simple', 'types', 'autoload')
+$test 		= 'core'; // ('core', 'class', 'simple', 'types', 'autoload')
 
 
 if($execTime) $start = microtime(true);
@@ -53,9 +53,12 @@ if($test == 'core') {
 	foreach($struct->items as $key => $item) {
 		echo $item.'<br/>';	
 	}
-	$string = $struct->items->implode(',')->explode(',');
+	$string = $struct->items->implode(',');
+	$array 	= $string->explode(',');
+	dumP($string->isArray());
+	dumP($array->isArray()->getLastResult());
 	dumP($string);
-	//die;
+	die;
 
 	// dumP($struct->someEl->someChild->someAgainChild);
 	// $obj = new \stdClass();
