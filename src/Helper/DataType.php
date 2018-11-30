@@ -147,9 +147,10 @@ class DataType
 	 * @param  string 	$name
 	 * @param  mixed  	$property
 	 * @param  mixed 	$value
+	 * @param  boolean 	$isProperty
 	 * @return mixed
 	 */
-	public static function assign(string $name, $property, $value)
+	public static function assign(string $name, $property, $value, $isProperty = true)
 	{
 		$length 	= 0;
 		$type 		= 'mixed';
@@ -255,7 +256,10 @@ class DataType
 			if($length) {
 				throw new \RuntimeException("Max length allowed for '".$name."' is ".$length);
 			} else {
-				throw new \RuntimeException("Property: ".$name." - Trying to assign '".self::getType($value)."' expected '".$type."'");
+				if($isProperty)
+					throw new \RuntimeException("Property: ".$name." - Trying to assign '".self::getType($value)."' expected '".$type."'");
+				else
+					throw new \RuntimeException("Variable: ".$name." - Trying to assign '".self::getType($value)."' expected '".$type."'");
 			}
 		}
 	}

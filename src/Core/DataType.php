@@ -48,12 +48,22 @@ class DataType
 	}
 
 	/**
+	 * Set value of variable
+	 * @param mixed $value
+	 */
+	public function setVal($value): void
+	{
+		$this->value = HelperDataType::assign($this->getType(), $this, $value, false);
+	}
+
+	/**
 	 * Get Type of value
 	 * @return string
 	 */
 	public function getType(): string
 	{
-		return gettype($this->value);
+		$type = gettype($this->value);
+		return ($type == 'double')? 'float': $type; 
 	}
 
 	/**
