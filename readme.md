@@ -3,7 +3,6 @@
 [![License](https://poser.pugx.org/amsify42/typestruct/license)](https://packagist.org/packages/amsify42/typestruct)
 
 ## TypeStruct
----
 PHP library for defining strictly typed multi-level structure validator.
 <br/><br/>
 **Objectives:**
