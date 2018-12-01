@@ -215,7 +215,7 @@ $float 	= typeFloat(4.2, 4, 2);
 // For array third param is size
 $array 	= typeArr([4,2], 'mixed', 2);
 ```
-**Important Note:** Since we cannot control variable assignment in PHP, we have to use this method to assign variable to take control of its type and size while changing value.
+**Important Note:** Since we cannot control variable assignment in PHP, we have to use this method to set value to take control of its type and size while changing value.
 ```php
 $string->setVal('str2');
 ``` 
