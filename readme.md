@@ -205,14 +205,14 @@ export typestruct Simple {
 1. The size we pass for float contains two parts separated by **dot** with no spaces, the number after dot represents fraction digits.
 2. The fraction digits does not send any validation message rather it will convert digits to the number of digits set.
 3. For array size, you can simply set the number between square braces.
-
+<br/>
 You can also define variables along with size in second parameter
 ```php
 $string = typeStr('str', 5);
 $int 	= typeInt(4, 4);
 // For float third param is fraction digits
 $float 	= typeFloat(4.2, 4, 2);
-// For array second param is size
+// For array third param is size
 $array 	= typeArr([4,2], 'mixed', 2);
 ```
 **Important Note:** Since we cannot control variable assignment in PHP, we have to use this method to assign variable to take control of its type and size while changing value.
