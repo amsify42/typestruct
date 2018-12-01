@@ -4,7 +4,7 @@
 
 ## TypeStruct
 PHP library for defining strictly typed multi-level structure validator.
-<br/><br/>
+<br\><br\>
 **Objectives:**
 1. To validate the multi-level data of object [or] array of key value pairs, that could either come from form submission [or] through APIs.
 2. To validate the structure of data and their types.
@@ -29,9 +29,9 @@ composer require amsify42/typestruct
 ### 1. Registering Autoloader
 ---
 Why Autoloader needs to be registered though we are using composer for psr4 autoload?
-<br/>
+<br\>
 **Answer:** The files we are going to create for typestruct does not contain PHP syntax and needs to be processed before it is being autoload by composer or some other way.
-<br/>
+<br\>
 This is how we can register autoloader.
 ```php
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -82,9 +82,9 @@ $struct = new \App\TypeStructs\Simple($data);
 $response = $struct->getResponse();
 ```
 You will get type errors incase your object structure and its types does not match with **Simple** structure.
-<br/>
+<br\>
 If you set **setValidateFull()** while registering as true, you will receive errors in **getResponse()** else run time exception will be thrown while validating itself.
-<br/><br/>
+<br\><br\>
 Suppose your object is validated as true, now you want to change the property of the typestruct object.
 ```php
 $struct->id = '23'; // You'll receive an exception error as id is of type int and you tried to assign string
@@ -205,7 +205,8 @@ export typestruct Simple {
 1. The size we pass for float contains two parts separated by **dot** with no spaces, the number after dot represents fraction digits.
 2. The fraction digits does not send any validation message rather it will convert digits to the number of digits set.
 3. For array size, you can simply set the number between square braces.
-<br/>
+
+<br\>
 You can also define variables along with size in second parameter
 ```php
 $string = typeStr('str', 5);
@@ -234,7 +235,7 @@ For built-in array methods you can even skip **array_** prefix
 ```php
 $string->explode(',')->reverse(); // array_reverse as reverse
 ```
-<br/>
+<br\>
 
 ### 7. Direct Validation
 ---
