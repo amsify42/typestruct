@@ -144,14 +144,14 @@ namespace {$this->info['namespace']};";
 
 class {$this->info['name']} extends \Amsify42\TypeStruct\DataType\Struct
 {
-	private \$struct = '".base64_encode(serialize($this->structure))."';
+	protected \$structure = '".base64_encode(serialize($this->structure))."';
 
 	function __construct(\$data)
 	{
-		if(is_string(\$this->struct)) {
-			\$this->struct = unserialize(base64_decode(\$this->struct));
+		if(is_string(\$this->structure)) {
+			\$this->structure = unserialize(base64_decode(\$this->structure));
 		}
-		parent::__construct(\$data, \$this->struct, {$isFull});
+		parent::__construct(\$data, NULL, {$isFull});
 	}
 }";
 		fwrite($fp, $content);

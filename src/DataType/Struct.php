@@ -16,7 +16,7 @@ class Struct
 
 	/**
 	 * Contains the structure with key value pair
-	 * @var stdClass
+	 * @var string|stdClass
 	 */
 	protected $structure;
 
@@ -28,15 +28,9 @@ class Struct
 
 	/**
 	 * Response data after validations
-	 * @var [type]
+	 * @var array
 	 */
 	private $response 	= [];
-
-	/**
-	 * Status of object validation
-	 * @var bool
-	 */
-	private $isValid 	= false;
 
 	/**
 	 * Initializing typestruct by validating and assigning values
@@ -44,24 +38,21 @@ class Struct
 	 * @param stdClass  		$structure
 	 * @param boolean 			$validateFull
 	 */
-	function __construct($data, stdClass $structure, bool $validateFull = false)
+	function __construct($data, stdClass $structure = NULL, bool $validateFull = false)
 	{
 		if(!is_array($data) && !$data instanceof stdClass) {
 			throw new \RuntimeException('TypeStruct Error: Data must be of type stdClass or array');
 		}
-		$data 				= is_array($data)? arrayToObject($data, $structure): $data;
+		if($structure) $this->structure = $structure;
+		$data 				= is_array($data)? arrayToObject($data, $this->structure): $data;
 		$this->validateFull = $validateFull;
-		$struct 			= new Structure($structure);
+		$struct 			= new Structure($this->structure);
 		$struct->setValidateFull($this->validateFull);
 		$this->response 	= $struct->validate($data);
 		if($this->response['isValid']) {
-			$this->data 		= DataType::childToStruct($data, $structure, false, $this->validateFull);
-			$this->structure 	= $structure;
-			$this->isValid 		= true;
+			$this->data 	= DataType::childToStruct($data, $this->structure, false, $this->validateFull);
 		} else {
-			if($this->validateFull) {
-				$this->isValid 	= false;
-			} else {
+			if(!$this->validateFull) {
 				$message = "Structure must be of type '".get_called_class()."'\n";
 				$message .= "\nError: ".$this->response['message'];
 				throw new \RuntimeException($message);
@@ -76,6 +67,7 @@ class Struct
 	 */
 	function __get($name)
 	{
+		$this->checkValid();
 		if(isset($this->data->{$name})) {
 			return $this->data->{$name};
 		}
@@ -88,6 +80,7 @@ class Struct
 	 */
 	function __set($name, $value)
 	{
+		$this->checkValid();
 		if(isset($this->data->{$name})) {
 			$this->data->{$name} = DataType::assign($name, $this->data->{$name}, $value);	
 		} else {
@@ -129,5 +122,24 @@ class Struct
 	public function getResponse(): array
 	{
 		return $this->response;
+	}
+
+	/**
+	 * Checks if validated
+	 * @return boolean
+	 */
+	public function isValid(): bool
+	{
+		return (isset($this->response['isValid']) && $this->response['isValid']);
+	}
+
+	/**
+	 * Check if validated else throw error
+	 */
+	private function checkValid()
+	{
+		if(!$this->isValid()) {
+			throw new \RuntimeException("TypeStruct Error: '".get_called_class()."' not validated to perform further operations");	
+		}
 	}
 }
