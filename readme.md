@@ -3,7 +3,7 @@
 [![License](https://poser.pugx.org/amsify42/typestruct/license)](https://packagist.org/packages/amsify42/typestruct)
 
 ## TypeStruct
-
+---
 PHP library for defining strictly typed multi-level structure validator.
 <br/><br/>
 **Objectives:**
@@ -22,8 +22,8 @@ composer require amsify42/typestruct
 1. [Registering Autoloader](#1-registering-autoloader)
 2. [Typestruct file](#2-typestruct-file)
 3. [Usage](#3-usage)
-4. [Data Size](#4-data-size)
-5. [Data Types](#5-data-types)
+4. [Data Types](#4-data-types)
+5. [Data Size](#5-data-size)
 6. [Built-in Functions](#6-built-in-functions)
 7. [Direct Validation](#7-direct-validation)
 
@@ -140,25 +140,7 @@ $struct = new \App\TypeStructs\Sample($data); // Pass data of stdClass or array 
 ```
 **Important Note:** The response you get in **$struct** variable will be of type object. Only those keys which represent array in typestruct file can be used as array.
 
-
-### 4. Data Size
----
-You can also rectrict data size for all the types
-```php
-namespace App\TypeStructs;
-
-export typestruct Simple {
-	id: int(5),
-	name: string(100),
-	price: float(5.2),
-	accessories: string[10]
-}
-```
-**Important Points:**
-1. The size we pass for float contains two parts separated by **dot** with no spaces, the number after dot represents fraction digits.
-2. For array size, you can simply set the number between square braces.
-
-### 5. Data Types
+### 4. Data Types
 ---
 #### Supported Data Types
 1. string
@@ -206,6 +188,38 @@ $bool 	= typeBool(true);
 $array 	= typeArr([4,2], 'mixed');
 $val 	= tsTypeVal('42');
 ```
+
+### 5. Data Size
+---
+You can also rectrict data size for all the types
+```php
+namespace App\TypeStructs;
+
+export typestruct Simple {
+	id: int(5),
+	name: string(100),
+	price: float(5.2),
+	accessories: string[10]
+}
+```
+**Important Points:**
+1. The size we pass for float contains two parts separated by **dot** with no spaces, the number after dot represents fraction digits.
+2. The fraction digits does not send any validation message rather it will convert digits to the number of digits set.
+3. For array size, you can simply set the number between square braces.
+
+You can also define variables along with size in second parameter
+```php
+$string = typeStr('str', 5);
+$int 	= typeInt(4, 4);
+// For float third param is fraction digits
+$float 	= typeFloat(4.2, 4, 2);
+// For array second param is size
+$array 	= typeArr([4,2], 'mixed', 2);
+```
+**Important Note:** Since we cannot control variable assignment in PHP, we have to use this method to assign variable to take control of its type and size while changing value.
+```php
+	$string->setVal('str2');
+``` 
 
 ### 6. Built-in Functions
 ---

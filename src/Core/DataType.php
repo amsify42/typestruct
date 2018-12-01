@@ -50,10 +50,12 @@ class DataType
 	/**
 	 * Set value of variable
 	 * @param mixed $value
+	 * @return self
 	 */
-	public function setVal($value): void
+	public function setVal($value): self
 	{
 		$this->value = HelperDataType::assign($this->getType(), $this, $value, false);
+		return $this;
 	}
 
 	/**

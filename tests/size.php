@@ -11,6 +11,7 @@ $execTime 	= true;
 if($execTime) $start = microtime(true);
 
 $autoLoader = new Amsify42\TypeStruct\AutoLoader();
+$autoLoader->setValidateFull(false);
 $autoLoader->setBaseNamespace(\TestTS\resources\structs::class);
 $autoLoader->register();
 
@@ -24,6 +25,6 @@ $struct 				= new \TestTS\resources\structs\Size($object);
 $struct->price 			= 43466.01;
 $struct->accessories 	= ['one', 'two', 'three', 'four'];
 //$struct->accessories[] 	= 'five';
-dumP($struct->getData());
+dumP($struct->getResponse());
 
 if($execTime) executionTime($start);

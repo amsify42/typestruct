@@ -296,8 +296,7 @@ class DataType
 	public static function checkType(string $name, $value, array $type): array
 	{
 		$result = ['isValid' => true, 'message' => ''];
-		$vType 	= $type['type'];
-		switch($vType) {
+		switch($type['type']) {
 			case 'string':
 				if(!is_string($value) && !$value instanceof DataTypes\TypeString) {
 					$result['isValid'] 	= false;
@@ -336,31 +335,38 @@ class DataType
 				break;	
 
 			default:
-				if(strpos($vType, '\\') !== false || preg_match("/^[A-Z]/", $vType)) {
-					if(!self::isResource($value, $vType)) {
+				if(strpos($type['type'], '\\') !== false || preg_match("/^[A-Z]/", $type['type'])) {
+					if(!self::isResource($value, $type['type'])) {
 						$result['isValid'] 	= false;
-						$result['message'] 	= $name.' must be of type class: '.$vType;
+						$result['message'] 	= $name.' must be of type class: '.$type['type'];
 					}
 				} else {
-					throw new \RuntimeException("Invalid data type: ".$vType);
+					throw new \RuntimeException("Invalid data type: ".$type['type']);
 				}
 				break;
 		}
 		if($result['isValid'] && isset($type['length']) && $type['length']) {
-			$result = self::checkLength($value, $vType, $type['length']);
+			$result = self::checkLength($name, $value, $type['type'], $type['length']);
 		}
 		return $result;
 	}
 
-	public static function checkLength($value, string $type, int $length): array
+	/**
+	 * Check Length description
+	 * @param  string 	$name
+	 * @param  mixed 	$value
+	 * @param  string 	$type
+	 * @param  int    	$length
+	 * @return array
+	 */
+	public static function checkLength(string $name, $value, string $type, int $length): array
 	{
 		$result = ['isValid' => true, 'message' => ''];
 		$val 	= ($value instanceof DtType)? (string)$value->value(): (string)$value;
 		if($type == 'float' || $value instanceof TypeFloat) {
 			$val = explode('.', $val)[0];
 		}
-		$length = strlen($val);
-		if($length > $length) {
+		if(strlen($val) > $length) {
 			$result['isValid'] = false;
 			$result['message'] = "Max length allowed for '".$name."' is ".$length;
 		}

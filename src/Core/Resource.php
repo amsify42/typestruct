@@ -116,9 +116,10 @@ class Resource
 	{
 		$getFile = json_decode($this->getJsonFile());
 		$updated = filemtime($this->info['path']);
-		if(!$getFile || ($getFile->updated != $updated)) {
+		if(!$getFile || ($getFile->updated != $updated) || ($getFile->isFull != $this->validateFull)) {
 			$data 			= new stdClass();
 			$data->updated 	= $updated;
+			$data->isFull 	= $this->validateFull;
 			$jsonData 		= json_encode($data);
 			file_put_contents($this->gInfo['json'], $jsonData);
 			$this->generateClass();
