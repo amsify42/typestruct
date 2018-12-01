@@ -206,8 +206,7 @@ export typestruct Simple {
 2. The fraction digits does not send any validation message rather it will convert digits to the number of digits set.
 3. For array size, you can simply set the number between square braces.
 
-
-You can also define variables along with size in second parameter
+You can also define variables along with size in next parameter.
 ```php
 $string = typeStr('str', 5);
 $int 	= typeInt(4, 4);
@@ -218,7 +217,7 @@ $array 	= typeArr([4,2], 'mixed', 2);
 ```
 **Important Note:** Since we cannot control variable assignment in PHP, we have to use this method to assign variable to take control of its type and size while changing value.
 ```php
-	$string->setVal('str2');
+$string->setVal('str2');
 ``` 
 
 ### 6. Built-in Functions
