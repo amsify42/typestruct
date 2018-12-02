@@ -148,10 +148,7 @@ class {$this->info['name']} extends \Amsify42\TypeStruct\DataType\Struct
 
 	function __construct(\$data)
 	{
-		if(is_string(\$this->structure)) {
-			\$this->structure = unserialize(base64_decode(\$this->structure));
-		}
-		parent::__construct(\$data, NULL, {$isFull});
+		parent::__construct(\$data, unserialize(base64_decode(\$this->structure)), {$isFull});
 	}
 }";
 		fwrite($fp, $content);

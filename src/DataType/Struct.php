@@ -38,12 +38,12 @@ class Struct
 	 * @param stdClass  		$structure
 	 * @param boolean 			$validateFull
 	 */
-	function __construct($data, stdClass $structure = NULL, bool $validateFull = false)
+	function __construct($data, stdClass $structure, bool $validateFull = false)
 	{
 		if(!is_array($data) && !$data instanceof stdClass) {
 			throw new \RuntimeException('TypeStruct Error: Data must be of type stdClass or array');
 		}
-		if($structure) $this->structure = $structure;
+		$this->structure 	= $structure;
 		$data 				= is_array($data)? arrayToObject($data, $this->structure): $data;
 		$this->validateFull = $validateFull;
 		$struct 			= new Structure($this->structure);
