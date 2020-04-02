@@ -1,2 +1,2 @@
 ## TypeStruct
-This package has been removed from packagist, hence not available to installation through composer.
+This package has been removed from packagist, hence not available for installation through composer.
